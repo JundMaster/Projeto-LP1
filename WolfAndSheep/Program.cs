@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Internal;
+using System.Dynamic;
+using System;
 
 namespace WolfAndSheep
 {
@@ -10,6 +12,7 @@ namespace WolfAndSheep
             intro();
 
             //Chama a função que inicia o jogo em si
+
             game();
 
         }
@@ -47,103 +50,118 @@ namespace WolfAndSheep
         {
             // Declarar variáveis
             Square[,] board;
-            string aux;
-            int wolfPos;
+            string aux1, aux2;
+            bool done = false;
+            int wolfVert = 0;
+            int wolfHorz = 0;
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
-
-            // cria o board com a classe Square
             board = new Square[8, 8];
-
-            // Criação de cada Square
-            for (int i = 0; i < 8; i++)
+            while (done == false)
             {
-                for (int j = 0; j < 8; j++)
+                // cria o board com a classe Square
+                // Criação de cada Square
+                for (int i = 0; i < 8; i++)
                 {
-                    // Cria uma instância da classe Square para cada ponto no 
-                    // tabuleiro
-                    board[i,j] = new Square(i, j);
+                    for (int j = 0; j < 8; j++)
+                    {
+                        // Cria uma instância da classe Square para cada ponto no 
+                        // tabuleiro
+                        board[i,j] = new Square(i, j);
 
-                    // Dá valores à row e column de cada instância do Square
-                    board[i,j].row = i;
-                    board[i,j].column = j;
+                        // Dá valores à row e column de cada instância do Square
+                        board[i,j].row = i;
+                        board[i,j].column = j;
 
-                    // Se o Square for BRANCO não é playable
-                    // Todos os pares (é branco)
-                    if (i % 2 == 0 && j % 2 == 0)
-                        board[i,j].isPlayable = false;
-                    // Todos os ímpares (é branco)
-                    else if (i % 2 != 0 && j % 2 != 0)
-                        board[i,j].isPlayable = false;
-                    // Resto dos quadrados (é preto)
-                    else
-                        board[i,j].isPlayable = true;
+                        // Se o Square for BRANCO não é playable
+                        // Todos os pares (é branco)
+                        if (i % 2 == 0 && j % 2 == 0)
+                            board[i,j].isPlayable = false;
+                        // Todos os ímpares (é branco)
+                        else if (i % 2 != 0 && j % 2 != 0)
+                            board[i,j].isPlayable = false;
+                        // Resto dos quadrados (é preto)
+                        else
+                            board[i,j].isPlayable = true;
+                    }
                 }
-            }
 
-            // Faz o loop do input do jogador ate colocar um Square válido
-            do 
-            {
-                // Variável utilizada para guardar a posição escolhida
-                aux = Console.ReadLine();
-                //Converte a string do input para int
-                wolfPos = Convert.ToInt16(aux);
-                if (board[0,wolfPos].isPlayable)
-                    break;
-                Console.WriteLine("Please choose a valid number");
-            } while(board[0,wolfPos].isPlayable == false);
-
-            // Posições dos animais
-            board[0,wolfPos].animal = "Wolf";
-            board[7,0].animal = "Sheep";
-            board[7,2].animal = "Sheep";
-            board[7,4].animal = "Sheep";
-            board[7,6].animal = "Sheep";
-
-
-            // Imprime o tabuleiro
-            Console.WriteLine("");
-            Console.WriteLine("Numbers = Playable Squares");
-            Console.WriteLine("Black Spaces = Unplayable Squares");
-            for (int i = 0; i < 8; i++)
-            {
-                Console.WriteLine("");
-                for (int j = 0; j < 8; j++)
+                // Faz o loop do input do jogador ate colocar um Square válido
+                do 
                 {
-                    // Imprime o WOLF em vez dos números e coloca esse mesmo
-                    // Square.isPlayable como falso
-                    if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
-                    {
-                        Console.Write("WW");
-                        board[i,j].isPlayable = false;
-                    }
+                    // Variável utilizada para guardar a posição escolhida
+                    Console.WriteLine("");
+                    Console.Write("insert a vertical num: ");
+                    aux1 = Console.ReadLine();
+                    Console.Write("insert a horizontal num: ");
+                    aux2 = Console.ReadLine();
+                    // if (Convert.ToChar(aux1) == 'q')
+                    // {
+                    //     done = true;
+                    // }
 
-                    // Imprime a SHEEP em vez dos números e coloca esse mesmo
-                    // Square.isPlayable como falso
-                    else if (board[i,j].animal == "Sheep" && board[i,j].
-                    isPlayable)
-                    {
-                        Console.Write("SH");
-                        board[i,j].isPlayable = false;
-                    }
-
-                    // Se não der para jogar imprime PRETO
-                    else if (board[i,j].isPlayable == false)
-                        Console.Write($"  ");
+                    //Converte a string do input para int
+                    wolfVert = Convert.ToInt16(aux1);
+                    wolfHorz = Convert.ToInt16(aux2);
+                    if (board[wolfVert, wolfHorz].isPlayable)
+                        break;
+                    Console.WriteLine("Please choose a valid number");
                     
-                    // Se der para jogar imprime a linha e a coluna
-                    else
+                    
+                } while(board[wolfVert, wolfHorz].isPlayable == false);
+
+                // Posições dos animais
+                board[wolfVert, wolfHorz].animal = "Wolf";
+                board[7,0].animal = "Sheep";
+                board[7,2].animal = "Sheep";
+                board[7,4].animal = "Sheep";
+                board[7,6].animal = "Sheep";
+
+
+                // Imprime o tabuleiro
+                Console.WriteLine("");
+                Console.WriteLine("Numbers = Playable Squares");
+                Console.WriteLine("Black Spaces = Unplayable Squares");
+                for (int i = 0; i < 8; i++)
+                {
+                    Console.WriteLine("");
+                    for (int j = 0; j < 8; j++)
                     {
-                        Console.Write($"{board[i,j].row}");
-                        Console.Write($"{board[i,j].column}");     
+                        // Imprime o WOLF em vez dos números e coloca esse mesmo
+                        // Square.isPlayable como falso
+                        if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
+                        {
+                            Console.Write("WW");
+                            board[i,j].isPlayable = false;
+                        }
+
+                        // Imprime a SHEEP em vez dos números e coloca esse mesmo
+                        // Square.isPlayable como falso
+                        else if (board[i,j].animal == "Sheep" && board[i,j].
+                        isPlayable)
+                        {
+                            Console.Write("SH");
+                            board[i,j].isPlayable = false;
+                        }
+
+                        // Se não der para jogar imprime PRETO
+                        else if (board[i,j].isPlayable == false)
+                            Console.Write($"  ");
+                        
+                        // Se der para jogar imprime a linha e a coluna
+                        else
+                        {
+                            Console.Write($"{board[i,j].row}");
+                            Console.Write($"{board[i,j].column}");     
+                        }
                     }
                 }
-            }
 
-            // Mensagem de vitória
-            // Vai detetar se o Wolf está num dos últimos Squares
-            foreach (int x in wolfVictoryPositions)
-                if (board[7,x].animal == "Wolf")
-                    victory("Wolf");
+                // Mensagem de vitória
+                // Vai detetar se o Wolf está num dos últimos Squares
+                foreach (int x in wolfVictoryPositions)
+                    if (board[7,x].animal == "Wolf")
+                        victory("Wolf");
+            }
         }
      }
     
