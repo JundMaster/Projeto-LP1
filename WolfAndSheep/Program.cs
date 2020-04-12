@@ -19,7 +19,7 @@ namespace WolfAndSheep
         {
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("Both animals can only move ONE square per turn.");
+            Console.WriteLine("Both animals can only move ONE square per turn");
             Console.WriteLine("Sheep can only move forward.");
             Console.WriteLine("The wolf can move forward and backwards.");
             Console.WriteLine("Only ONE sheep can move per turn.");
@@ -27,20 +27,31 @@ namespace WolfAndSheep
             Console.WriteLine("The wolf must reach the bottom squares.");
             Console.WriteLine("The flock of sheep must block wolf's path.");
             Console.WriteLine("The flock of sheep win if they block wolf's path.");
+            Console.WriteLine("Players must type the square's number to move the animal.");
 
             Console.WriteLine("");
             
             //Pede ao jogador a casa inicial do Lobo
-            Console.WriteLine("-- Choose Wolf Square --");
+            Console.WriteLine("-- Insert Wolf's Initial Square Number--");
             Console.WriteLine("-- 1     3     5    7 --");
         }
+
+        private static void victory(string animal)
+        {
+            Console.WriteLine("");
+            Console.WriteLine($"Congratulations, {animal} won the game !!!");
+        }
+
+
         private static void game()
         {
             // Declarar variáveis
             Square[,] board;
             string aux;
             int wolfPos;
+            int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
 
+            // cria o board com a classe Square
             board = new Square[8, 8];
 
             // Criação de cada Square
@@ -69,22 +80,25 @@ namespace WolfAndSheep
                 }
             }
 
-
+            // Faz o loop do input do jogador ate colocar um Square válido
             do 
             {
                 // Variável utilizada para guardar a posição escolhida
                 aux = Console.ReadLine();
                 //Converte a string do input para int
                 wolfPos = Convert.ToInt16(aux);
+                if (board[0,wolfPos].isPlayable)
+                    break;
                 Console.WriteLine("Please choose a valid number");
             } while(board[0,wolfPos].isPlayable == false);
 
-
+            // Posições dos animais
             board[0,wolfPos].animal = "Wolf";
             board[7,0].animal = "Sheep";
             board[7,2].animal = "Sheep";
             board[7,4].animal = "Sheep";
             board[7,6].animal = "Sheep";
+
 
             // Imprime o tabuleiro
             Console.WriteLine("");
@@ -95,14 +109,22 @@ namespace WolfAndSheep
                 Console.WriteLine("");
                 for (int j = 0; j < 8; j++)
                 {
-                    // Imprime o WOLF em vez dos números
+                    // Imprime o WOLF em vez dos números e coloca esse mesmo
+                    // Square.isPlayable como falso
                     if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
+                    {
                         Console.Write("WW");
+                        board[i,j].isPlayable = false;
+                    }
 
-                    // Imprime a SHEEP em vez dos números
+                    // Imprime a SHEEP em vez dos números e coloca esse mesmo
+                    // Square.isPlayable como falso
                     else if (board[i,j].animal == "Sheep" && board[i,j].
                     isPlayable)
-                        Console.Write("SH"); 
+                    {
+                        Console.Write("SH");
+                        board[i,j].isPlayable = false;
+                    }
 
                     // Se não der para jogar imprime PRETO
                     else if (board[i,j].isPlayable == false)
@@ -116,10 +138,13 @@ namespace WolfAndSheep
                     }
                 }
             }
+
+            // Mensagem de vitória
+            // Vai detetar se o Wolf está num dos últimos Squares
+            foreach (int x in wolfVictoryPositions)
+                if (board[7,x].animal == "Wolf")
+                    victory("Wolf");
         }
-
-
-
      }
     
 
