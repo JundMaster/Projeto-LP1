@@ -6,6 +6,24 @@ namespace WolfAndSheep
     {
         static void Main(string[] args)
         {
+            //Pede ao jogador a casa inicial do Lobo
+            Console.WriteLine("-- Choose Wolf Square --");
+            Console.WriteLine("-- 1     3     5    7 --");
+
+            //Chama a funçao que inicia o jogo em si
+            game();
+
+        }
+
+        private static void game()
+        {
+            /*Instanciaçao da variavel utilizada para guardar a posiçao
+            escolhida pelo jogador*/
+            string aux = Console.ReadLine();
+
+            //Converte a string do input para int
+            int wolfPos = Convert.ToInt16(aux);
+
             // Declarar variáveis
             Square[,] board;
             board = new Square[8, 8];
@@ -36,13 +54,12 @@ namespace WolfAndSheep
                 }
             }
 
-
             // Exemplo para imprimir o wolf
-            
-            var x = Convert.ToInt16(Console.ReadLine());
-            var y = Convert.ToInt16(Console.ReadLine());
-            board[x,y].animal = "Wolf";
-
+            board[0,wolfPos].animal = "Wolf";
+            board[7,0].animal = "Sheep";
+            board[7,2].animal = "Sheep";
+            board[7,4].animal = "Sheep";
+            board[7,6].animal = "Sheep";
 
             // Imprime o tabuleiro
             Console.WriteLine("");
@@ -53,8 +70,14 @@ namespace WolfAndSheep
                 Console.WriteLine("");
                 for (int j = 0; j < 8; j++)
                 {
-                    if (board[i,j].animal == "Wolf")
-                        Console.Write("W ");
+                    // Imprime o WOLF em vez dos números
+                    if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
+                        Console.Write("WW");
+
+                    // Imprime a SHEEP em vez dos números
+                    else if (board[i,j].animal == "Sheep" && 
+                        board[i,j].isPlayable)
+                        Console.Write("SH"); 
 
                     // Se não der para jogar imprime PRETO
                     else if (board[i,j].isPlayable == false)
@@ -68,9 +91,12 @@ namespace WolfAndSheep
                     }
                 }
             }
-
         }
+
+
+
      }
+    
 
     class Square
     {
