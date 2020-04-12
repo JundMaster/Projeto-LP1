@@ -38,7 +38,10 @@ namespace WolfAndSheep
 
 
             // Exemplo para imprimir o wolf
-            board[0,1].animal = "Wolf";
+            
+            var x = Convert.ToInt16(Console.ReadLine());
+            var y = Convert.ToInt16(Console.ReadLine());
+            board[x,y].animal = "Wolf";
 
 
             // Imprime o tabuleiro
