@@ -6,26 +6,41 @@ namespace WolfAndSheep
     {
         static void Main(string[] args)
         {
-            //Pede ao jogador a casa inicial do Lobo
-            Console.WriteLine("-- Choose Wolf Square --");
-            Console.WriteLine("-- 1     3     5    7 --");
+            // Chama função de introdução
+            intro();
 
-            //Chama a funçao que inicia o jogo em si
+            //Chama a função que inicia o jogo em si
             game();
 
         }
 
+        private static void intro()
+
+        {
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("Both animals can only move ONE square per turn.");
+            Console.WriteLine("Sheep can only move forward.");
+            Console.WriteLine("The wolf can move forward and backwards.");
+            Console.WriteLine("Only ONE sheep can move per turn.");
+            Console.WriteLine("The animals can only move to numbered empty squares.");
+            Console.WriteLine("The wolf must reach the bottom squares.");
+            Console.WriteLine("The flock of sheep must block wolf's path.");
+            Console.WriteLine("The flock of sheep win if they block wolf's path.");
+
+            Console.WriteLine("");
+            
+            //Pede ao jogador a casa inicial do Lobo
+            Console.WriteLine("-- Choose Wolf Square --");
+            Console.WriteLine("-- 1     3     5    7 --");
+        }
         private static void game()
         {
-            /*Instanciaçao da variavel utilizada para guardar a posiçao
-            escolhida pelo jogador*/
-            string aux = Console.ReadLine();
-
-            //Converte a string do input para int
-            int wolfPos = Convert.ToInt16(aux);
-
             // Declarar variáveis
             Square[,] board;
+            string aux;
+            int wolfPos;
+
             board = new Square[8, 8];
 
             // Criação de cada Square
@@ -54,7 +69,17 @@ namespace WolfAndSheep
                 }
             }
 
-            // Exemplo para imprimir o wolf
+
+            do 
+            {
+                // Variável utilizada para guardar a posição escolhida
+                aux = Console.ReadLine();
+                //Converte a string do input para int
+                wolfPos = Convert.ToInt16(aux);
+                Console.WriteLine("Please choose a valid number");
+            } while(board[0,wolfPos].isPlayable == false);
+
+
             board[0,wolfPos].animal = "Wolf";
             board[7,0].animal = "Sheep";
             board[7,2].animal = "Sheep";
@@ -75,8 +100,8 @@ namespace WolfAndSheep
                         Console.Write("WW");
 
                     // Imprime a SHEEP em vez dos números
-                    else if (board[i,j].animal == "Sheep" && 
-                        board[i,j].isPlayable)
+                    else if (board[i,j].animal == "Sheep" && board[i,j].
+                    isPlayable)
                         Console.Write("SH"); 
 
                     // Se não der para jogar imprime PRETO
