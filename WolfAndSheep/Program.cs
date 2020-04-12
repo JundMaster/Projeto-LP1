@@ -1,6 +1,4 @@
-﻿using Internal;
-using System.Dynamic;
-using System;
+﻿using System;
 
 namespace WolfAndSheep
 {
