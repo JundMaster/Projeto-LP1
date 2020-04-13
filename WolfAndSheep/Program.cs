@@ -42,7 +42,8 @@ namespace WolfAndSheep
 
         private static void victory(string animal, int plays)
         {
-            Console.WriteLine("");
+            Console.WriteLine(" ");
+            Console.WriteLine(" ");
             Console.WriteLine($"Congratulations, {animal} won the game !!!");
             Console.WriteLine($"Number of plays = {plays}");
         }
@@ -149,6 +150,7 @@ namespace WolfAndSheep
                         }
 
                         // Se não for válido vai repetir o processo
+                        Console.WriteLine(" ");
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
                 }
@@ -163,8 +165,8 @@ namespace WolfAndSheep
                         // Define posição playable atual do WOLF como false
                         board[wolfVert, wolfHorz].isPlayable = false;
                         
-                        Console.WriteLine("");
-                        Console.WriteLine("");
+                        Console.WriteLine(" ");
+                        Console.WriteLine(" ");
                         Console.WriteLine("----------- WOLF TURN -----------");
 
                         // Pedir input ao jogador
@@ -226,6 +228,10 @@ namespace WolfAndSheep
                 {
                     do
                     {
+                        // Nos turnos das ovelhas mete os isPlayable do
+                        // WOLF a False
+                        board[wolfVert, wolfHorz].isPlayable = false;
+
                         Console.WriteLine("");
                         Console.WriteLine("");
                         Console.WriteLine("----------- FLOCK TURN -----------");
@@ -365,7 +371,9 @@ namespace WolfAndSheep
                 
                 
 
-                
+                // So para testar ------------------------------------------------------------------------
+                Console.WriteLine("");
+                Console.WriteLine($"TESTE - WOLF PLAYABLE: {board[wolfVert, wolfHorz].isPlayable}, {board[wolfVert, wolfHorz].row}, {board[wolfVert, wolfHorz].column}");
 
                 // Imprime o tabuleiro
                 
@@ -375,21 +383,22 @@ namespace WolfAndSheep
                 Console.WriteLine("Black Spaces = Unplayable Squares");
                 Console.WriteLine("exit  <- to quit the game");
 
-                // So para testar ------------------------------------------------------------------------
-                Console.WriteLine("");
-                Console.WriteLine($"TESTE - WOLF PLAYABLE: {board[wolfVert, wolfHorz].isPlayable}, {board[wolfVert, wolfHorz].row}, {board[wolfVert, wolfHorz].column}");
-                
+                // Imprime números no topo do tabuleiro
+                Console.WriteLine("     0 1 2 3 4 5 6 7");
                 for (int i = 0; i < 8; i++)
                 {
                     Console.WriteLine("");
+                    Console.Write($"{i}   ");
                     for (int j = 0; j < 8; j++)
                     {
+                        
+
                         // Imprime o WOLF em vez dos números e coloca esse mesmo
                         // Square.isPlayable como falso
                         if (board[i,j].animal == "Wolf")
                         {
                             Console.Write("WW");
-                            board[i,j].isPlayable = false;
+                            // pode-se apagar no fim se nao houver problema >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> board[i,j].isPlayable = false;
                         }
 
                         // Imprime a SHEEP em vez dos números e coloca esse mesmo
@@ -430,7 +439,11 @@ namespace WolfAndSheep
                             Console.Write($"{board[i,j].column}");     
                         }
                     }
+                    // Imprime os números à direita do tabuleiro
+                    Console.Write($"   {i}");
                 }
+                // Imprime números em baixo do tabuleiro
+                Console.WriteLine("\n\n     0 1 2 3 4 5 6 7");
 
 
 
@@ -455,7 +468,7 @@ namespace WolfAndSheep
 
     class Square
     {
-        // Diz se pode mover para o próximo quadrado
+        // Diz se o square pode ser jogado ou não
         public bool isPlayable;
         // Linha do tabuleiro
         public int row;
