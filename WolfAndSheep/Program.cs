@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq.Expressions;
+using System;
 
 namespace WolfAndSheep
 {
@@ -42,7 +43,8 @@ namespace WolfAndSheep
 
         private static void victory(string animal, int plays)
         {
-            Console.WriteLine("");
+            Console.WriteLine(" ");
+            Console.WriteLine(" ");
             Console.WriteLine($"Congratulations, {animal} won the game !!!");
             Console.WriteLine($"Number of plays = {plays}");
         }
@@ -95,11 +97,12 @@ namespace WolfAndSheep
             
             // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
+
+            const string errorMessage = "----------- Error Message -----------";
             
 
             while (gameOver == false)
             {
-                
                 // cria o board com a classe Square
                 // Criação de cada Square
                 for (int i = 0; i < 8; i++)
@@ -164,6 +167,7 @@ namespace WolfAndSheep
                         }
 
                         // Se não for válido vai repetir o processo
+                        Console.WriteLine(" ");
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
                 }
@@ -178,8 +182,9 @@ namespace WolfAndSheep
                         // Define posição playable atual do WOLF como false
                         board[wolfVert, wolfHorz].isPlayable = false;
                         
-                        Console.WriteLine("");
-                        Console.WriteLine("");
+
+                        Console.WriteLine(" ");
+                        Console.WriteLine(" ");
                         Console.WriteLine("----------- WOLF TURN -----------");
 
                         // Pedir input ao jogador
@@ -195,13 +200,60 @@ namespace WolfAndSheep
                         }
                         
                         // Input temporário que serve para comparar com o antigo
-                        wolfVertTemp = Convert.ToInt16(aux1);
-                        wolfHorzTemp = Convert.ToInt16(aux2);
+
+
+                        try
+                        {
+                            wolfVertTemp = Convert.ToInt16(aux1);
+                        }
+                        // Aparece uma mensagem para inserir um número válido
+                        // caso o jogador insira um número muito grande
+                        catch (OverflowException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("Please insert a valid number.");
+                            continue;
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("The input must be a valid line number"+
+                            " or the 'exit' command.");
+                            continue;
+                        }
+
+                        try
+                        {
+                            wolfHorzTemp = Convert.ToInt16(aux2);
+                        }
+                        // Aparece uma mensagem para inserir um número válido
+                        // caso o jogador insira um número muito grande
+                        catch (OverflowException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("Please insert a valid number.");
+                            continue;
+                        }
+                        
+                        catch (FormatException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("The input must be a valid line number"+
+                            " or the 'exit' command.");
+                            continue;
+                        }
+
+                        
+                        
                         
                         // Se meter o número valido, sai do loop
                         // Só aceita números com +1 ou -1 que a casa atual
-                        if (wolfVertTemp >= 0 && wolfVertTemp <= 9 && 
-                                wolfHorzTemp >= 0 && wolfHorzTemp <= 9 )
+                        if (wolfVertTemp >= 0 && wolfVertTemp <= 8 && 
+                                wolfHorzTemp >= 0 && wolfHorzTemp <= 8 )
                             if (wolfVertTemp != wolfVert && 
                                     wolfHorzTemp != wolfHorz )
                                 if (wolfVertTemp < wolfVert + 2 && 
@@ -249,13 +301,9 @@ namespace WolfAndSheep
                     Console.Write($"You chose {aux3}\n");
                     do
                     {
-                        
                         // Nos turnos das ovelhas mete os isPlayable do
                         // WOLF a False
                         board[wolfVert, wolfHorz].isPlayable = false;
-                        
-                        //Bloco de codigo que verifica que Ovelha o jogador escolheu
-                        //e altera a sua posiçao consoante a escolha
                         if(aux3 == "S1")
                         {
                             
@@ -444,7 +492,7 @@ namespace WolfAndSheep
                                 sheep4HorzTemp >= 0 && sheep4HorzTemp <= 8 )
                             if (sheep4VertTemp != sheep4Vert && 
                                     sheep4HorzTemp != sheep4Horz )
-                                if (sheep4VertTemp < sheep4Vert && 
+                                if (sheep4VertTemp < sheep4Vert + 2 && 
                                         sheep4HorzTemp < sheep4Horz + 2)
                                     if (sheep4VertTemp > sheep4Vert - 2 && 
                                             sheep4HorzTemp > sheep4Horz -2)   
@@ -501,10 +549,12 @@ namespace WolfAndSheep
                 Console.WriteLine("Black Spaces = Unplayable Squares");
                 Console.WriteLine("exit  <- to quit the game");
 
-            
+                // Imprime números no topo do tabuleiro
+                Console.WriteLine("     0 1 2 3 4 5 6 7");
                 for (int i = 0; i < 8; i++)
                 {
                     Console.WriteLine("");
+                    Console.Write($"{i}   ");
                     for (int j = 0; j < 8; j++)
                     {
                         
@@ -513,7 +563,7 @@ namespace WolfAndSheep
                         if (board[i,j].animal == "Wolf")
                         {
                             Console.Write("WW");
-                            board[i,j].isPlayable = false;
+                            
                         }
 
                         // Imprime a SHEEP em vez dos números e coloca esse mesmo
@@ -551,9 +601,11 @@ namespace WolfAndSheep
                             Console.Write($"{board[i,j].column}");     
                         }
                     }
-                
-                    
+                    // Imprime os números à direita do tabuleiro
+                    Console.Write($"   {i}");
                 }
+                // Imprime números em baixo do tabuleiro
+                Console.WriteLine("\n\n     0 1 2 3 4 5 6 7");
 
                 
 
@@ -578,7 +630,7 @@ namespace WolfAndSheep
 
     class Square
     {
-        // Diz se pode mover para o próximo quadrado
+        // Diz se o square pode ser jogado ou não
         public bool isPlayable;
         // Linha do tabuleiro
         public int row;
