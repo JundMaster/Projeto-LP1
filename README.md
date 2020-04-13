@@ -4,7 +4,7 @@
 
 Gonçalo Verde (a21901395)\
 Pedro Marques (a21900253)\
-Luiz Santos (a21901441)\
+Luiz Santos (a21901441)
 
 ---
 ### Tarefas realizadas no exercício
@@ -48,4 +48,4 @@ Após isto optámos por criar os _loops_ de _gameplay_, nos quais começámos po
 ### Trocas de ideias/referências
 
 #### Criação da classe _Square_
-- Sluiter, Shad."C# Chess Board 02 board cell classes" _Youtube_, uploaded by shad sluiter, Jun 13, 2019, www.youtu.be/SFMVyiJ2S6g
+- Sluiter, Shad."C# Chess Board 02 board cell classes" _Youtube_, uploaded by shad sluiter, Jun 13, 2019, youtu.be/SFMVyiJ2S6g
