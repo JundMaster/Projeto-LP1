@@ -63,14 +63,14 @@ namespace WolfAndSheep
             // Variáveis para o movimento do lobo
             int wolfVert = 0;
             int wolfHorz = 0;
-            int sheep1Vert = 0;
-            int sheep2Vert = 0;
-            int sheep3Vert = 0;
-            int sheep4Vert = 0;
+            int sheep1Vert = 7;
+            int sheep2Vert = 7;
+            int sheep3Vert = 7;
+            int sheep4Vert = 7;
             int sheep1Horz = 0;
-            int sheep2Horz = 0;
-            int sheep3Horz = 0;
-            int sheep4Horz = 0;
+            int sheep2Horz = 2;
+            int sheep3Horz = 4;
+            int sheep4Horz = 6;
 
             // Posições de vitória para o lobo
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
@@ -309,15 +309,10 @@ namespace WolfAndSheep
 
                 // Posições dos animais
                 board[wolfVert, wolfHorz].animal = "Wolf";
-                if (numberOfPlays < 2)
-                {
-                    board[7,0].animal = "Sheep_01";
-                    board[7,2].animal = "Sheep_02";
-                    board[7,4].animal = "Sheep_03";
-                    board[7,6].animal = "Sheep_04";
-                }
-                
-                    
+                board[sheep1Vert, sheep1Horz].animal = "Sheep_01";
+                board[sheep2Vert, sheep2Horz].animal = "Sheep_02";
+                board[sheep3Vert, sheep3Horz].animal = "Sheep_03";
+                board[sheep4Vert, sheep4Horz].animal = "Sheep_04";
                 
                 
 
