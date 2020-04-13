@@ -204,7 +204,7 @@ namespace WolfAndSheep
                             Console.WriteLine(errorMessage);
                             Console.WriteLine("");
                             Console.WriteLine("The input must be a valid line number"+
-                            "or the 'exit' command.");
+                            " or the 'exit' command.");
                             continue;
                         }
 
@@ -227,7 +227,7 @@ namespace WolfAndSheep
                             Console.WriteLine(errorMessage);
                             Console.WriteLine("");
                             Console.WriteLine("The input must be a valid line number"+
-                            "or the 'exit' command.");
+                            " or the 'exit' command.");
                             continue;
                         }
 
