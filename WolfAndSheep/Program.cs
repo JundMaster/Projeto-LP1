@@ -60,9 +60,13 @@ namespace WolfAndSheep
             // Variável para o número de jogadas
             int numberOfPlays = 0;
 
-            // Variáveis para o movimento do lobo
+            // Variáveis para o movimento do WOLF
             int wolfVert = 0;
             int wolfHorz = 0;
+            int wolfVertTemp = 0;
+            int wolfHorzTemp = 0;
+
+            // Variáveis para o movimento da SHEEP
             int sheep1Vert = 0;
             int sheep2Vert = 0;
             int sheep3Vert = 0;
@@ -72,7 +76,7 @@ namespace WolfAndSheep
             int sheep3Horz = 0;
             int sheep4Horz = 0;
 
-            // Posições de vitória para o lobo
+            // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
             
 
@@ -138,16 +142,21 @@ namespace WolfAndSheep
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
                 }
-                
+                    
 
                 // Jogadas para o WOLF
                 // Quando o numero de jogadas é ímpar
                 else if (numberOfPlays % 2 != 0)
+                {
                     do 
                     {
+                        // Define posição playable anterior do WOLF como false
+                        board[wolfVert, wolfHorz].isPlayable = false;
+
                         Console.WriteLine("");
                         Console.WriteLine("");
                         Console.WriteLine("----------- WOLF TURN -----------");
+
                         // Pedir input ao jogador
                         Console.Write("Insert a vertical num: ");
                         aux1 = Console.ReadLine();
@@ -160,21 +169,46 @@ namespace WolfAndSheep
                             break;
                         }
                         
-                        //Converte a string do input para int
-                        wolfVert = Convert.ToInt16(aux1);
-                        wolfHorz = Convert.ToInt16(aux2);
+                        // Input temporário que serve para comparar com o antigo
+                        wolfVertTemp = Convert.ToInt16(aux1);
+                        wolfHorzTemp = Convert.ToInt16(aux2);
 
                         // Se meter o número valido, sai do loop
-                        if (board[wolfVert, wolfHorz].isPlayable)
-                            break;
-                        
+                        // Só aceita números com +1 ou -1 que a casa atual
+                        if (wolfVertTemp >= 0 && wolfVertTemp <= 8 && 
+                                wolfHorzTemp >= 0 && wolfHorzTemp <= 8 )
+                            if (wolfVertTemp != wolfVert && 
+                                    wolfHorzTemp != wolfHorz )
+                                if (wolfVertTemp < wolfVert + 2 && 
+                                        wolfHorzTemp < wolfHorz + 2)
+                                    if (wolfVertTemp > wolfVert - 2 && 
+                                            wolfHorzTemp > wolfHorz -2)
+                                    {
+                                        // Corrige um erro em que o WW deixa 
+                                        // de imprimir
+                                        board[wolfVert, wolfHorz].
+                                                isPlayable = true;
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[wolfVertTemp, wolfHorzTemp].
+                                                isPlayable)
+                                        {
+                                            wolfVert = wolfVertTemp;
+                                            wolfHorz = wolfHorzTemp;
+                                            break;
+                                        }
+                                    }
+    
+            
                         // Se não for válido vai repetir o processo
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
+                }
 
 
                 // Jogadas para A SHEEP
-                // Quando o numero de jogadas é ímpar
+                // Quando o numero de jogadas é par
                 else if (numberOfPlays % 2 == 0)
                 {
                     do
@@ -335,8 +369,6 @@ namespace WolfAndSheep
                     Console.WriteLine("");
                     for (int j = 0; j < 8; j++)
                     {
-                        
-
                         // Imprime o WOLF em vez dos números e coloca esse mesmo
                         // Square.isPlayable como falso
                         if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
@@ -351,25 +383,25 @@ namespace WolfAndSheep
                         isPlayable)
                         {
                             Console.Write("S1");
-                            board[i,j].isPlayable = false;
+                            // pode-se apagar no fim se nao houver problema >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> board[i,j].isPlayable = false;
                         }
                         else if (board[i,j].animal == "Sheep_02" && board[i,j].
                         isPlayable)
                         {
                             Console.Write("S2");
-                            board[i,j].isPlayable = false;
+                            // pode-se apagar no fim se nao houver problema >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> board[i,j].isPlayable = false;
                         }
                         else if (board[i,j].animal == "Sheep_03" && board[i,j].
                         isPlayable)
                         {
                             Console.Write("S3");
-                            board[i,j].isPlayable = false;
+                            // pode-se apagar no fim se nao houver problema >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> board[i,j].isPlayable = false;
                         }
                         else if (board[i,j].animal == "Sheep_04" && board[i,j].
                         isPlayable)
                         {
                             Console.Write("S4");
-                            board[i,j].isPlayable = false;
+                            // pode-se apagar no fim se nao houver problema >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> board[i,j].isPlayable = false;
                         }
 
                         // Se não der para jogar imprime PRETO
