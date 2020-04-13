@@ -278,34 +278,35 @@ namespace WolfAndSheep
                             // Se meter o número valido, sai do loop
                             // Só aceita números com +1 ou -1 na Horizontal
                             // e -1 na Vertical que a casa atual
-                            if (sheep1VertTemp >= 0 && sheep1HorzTemp >= 0 
-                                && sheep1HorzTemp <= 8 )                    
+                            if (sheep1VertTemp >= 0 && sheep1VertTemp <= 8 && 
+                                sheep1HorzTemp >= 0 && sheep1HorzTemp <= 8 )                    
                                 if (sheep1VertTemp != sheep1Vert && 
                                     sheep1HorzTemp != sheep1Horz )
-                                    if ( sheep1HorzTemp < sheep1Horz + 2)
+                                    if ( sheep1VertTemp < sheep1Vert && 
+                                        sheep1HorzTemp < sheep1Horz + 2)
                                         if (sheep1VertTemp > sheep1Vert - 2 && 
-                                        sheep1HorzTemp > sheep1Horz -2)     
-                                    {
-
-                                        // Transforma as próximas coordernadas 
-                                        // nas do input do utilizador
-                                        if (board[sheep1VertTemp, sheep1HorzTemp].
-                                                isPlayable)
+                                            sheep1HorzTemp > sheep1Horz -2)      
                                         {
-                                            // Define posição em que a Sheep
-                                            // estava como playable = TRUE
-                                            board[sheep1Vert, sheep1Horz].
-                                                    isPlayable = true;
-                                            // Define nova posição da sheep e
-                                            // define como playable = False
-                                            sheep1Vert = sheep1VertTemp;
-                                            sheep1Horz = sheep1HorzTemp;
-                                            board[sheep1Vert, sheep1Horz].
-                                                isPlayable = false;
-                                            break;
-                                            
-                                        }
-                                    }                         
+
+                                            // Transforma as próximas coordernadas 
+                                            // nas do input do utilizador
+                                            if (board[sheep1VertTemp, sheep1HorzTemp].
+                                                    isPlayable)
+                                            {
+                                                // Define posição em que a Sheep
+                                                // estava como playable = TRUE
+                                                board[sheep1Vert, sheep1Horz].
+                                                        isPlayable = true;
+                                                // Define nova posição da sheep e
+                                                // define como playable = False
+                                                sheep1Vert = sheep1VertTemp;
+                                                sheep1Horz = sheep1HorzTemp;
+                                                board[sheep1Vert, sheep1Horz].
+                                                    isPlayable = false;
+                                                break;
+                                                
+                                            }
+                                        }                         
                         }
 
                         else if(aux3 == "S2")
@@ -333,11 +334,11 @@ namespace WolfAndSheep
                             if (sheep2VertTemp >= 0 && sheep2VertTemp <= 8 && 
                                 sheep2HorzTemp >= 0 && sheep2HorzTemp <= 8 )
                             if (sheep2VertTemp != sheep2Vert && 
-                                    sheep2HorzTemp != sheep2Horz )
-                                if (sheep2VertTemp < sheep2Vert + 2 && 
-                                        sheep2HorzTemp < sheep2Horz + 2)
+                                sheep2HorzTemp != sheep2Horz )
+                                if (sheep2VertTemp < sheep2Vert && 
+                                    sheep2HorzTemp < sheep2Horz + 2)
                                     if (sheep2VertTemp > sheep2Vert - 2 && 
-                                            sheep2HorzTemp > sheep2Horz -2)  
+                                        sheep2HorzTemp > sheep2Horz -2)  
                                     {
 
                                         // Transforma as próximas coordenadas 
@@ -388,7 +389,7 @@ namespace WolfAndSheep
                                 sheep3HorzTemp >= 0 && sheep3HorzTemp <= 8 )
                             if (sheep3VertTemp != sheep3Vert && 
                                     sheep3HorzTemp != sheep3Horz )
-                                if (sheep3VertTemp < sheep3Vert + 2 && 
+                                if (sheep3VertTemp < sheep3Vert && 
                                         sheep3HorzTemp < sheep3Horz + 2)
                                     if (sheep3VertTemp > sheep3Vert - 2 && 
                                             sheep3HorzTemp > sheep3Horz -2)   
@@ -443,7 +444,7 @@ namespace WolfAndSheep
                                 sheep4HorzTemp >= 0 && sheep4HorzTemp <= 8 )
                             if (sheep4VertTemp != sheep4Vert && 
                                     sheep4HorzTemp != sheep4Horz )
-                                if (sheep4VertTemp < sheep4Vert + 2 && 
+                                if (sheep4VertTemp < sheep4Vert && 
                                         sheep4HorzTemp < sheep4Horz + 2)
                                     if (sheep4VertTemp > sheep4Vert - 2 && 
                                             sheep4HorzTemp > sheep4Horz -2)   
