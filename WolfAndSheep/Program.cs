@@ -391,7 +391,11 @@ namespace WolfAndSheep
                 foreach (int x in wolfVictoryPositions)
                 {
                     if (board[7,x].animal == "Wolf")
+                    {
                         victory("Wolf", numberOfPlays);
+                        gameOver = true;
+                    }
+
                 }
             }
         }
