@@ -195,8 +195,8 @@ namespace WolfAndSheep
                         
                         // Se meter o número valido, sai do loop
                         // Só aceita números com +1 ou -1 que a casa atual
-                        if (wolfVertTemp >= 0 && wolfVertTemp <= 8 && 
-                                wolfHorzTemp >= 0 && wolfHorzTemp <= 8 )
+                        if (wolfVertTemp >= 0 && wolfVertTemp <= 9 && 
+                                wolfHorzTemp >= 0 && wolfHorzTemp <= 9 )
                             if (wolfVertTemp != wolfVert && 
                                     wolfHorzTemp != wolfHorz )
                                 if (wolfVertTemp < wolfVert + 2 && 
@@ -234,17 +234,20 @@ namespace WolfAndSheep
                 // Quando o numero de jogadas é par
                 else if (numberOfPlays % 2 == 0)
                 {
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                    Console.WriteLine("----------- FLOCK TURN -----------");
+                    Console.WriteLine("Choose a Sheep to play:\n");
+                    Console.WriteLine("-- S1     S2     S3    S4 --");
+                    aux3 = Console.ReadLine();
+                    Console.Write($"You chose {aux3}\n");
                     do
                     {
-                        Console.WriteLine("");
-                        Console.WriteLine("");
-                        Console.WriteLine("----------- FLOCK TURN -----------");
-                        Console.WriteLine("Choose a Sheep to play:\n");
-                        Console.WriteLine("-- S1     S2     S3    S4 --");
-                        aux3 = Console.ReadLine();
+                        
+                        
                         if(aux3 == "S1")
                         {
-                            Console.Write("You chose sheep 1");
+                            
                             // Pedir input ao jogador
                             Console.Write("Insert a vertical num: ");
                             aux1 = Console.ReadLine();
@@ -268,9 +271,10 @@ namespace WolfAndSheep
                                 sheep1HorzTemp >= 0 && sheep1HorzTemp <= 8 )
                             if (sheep1VertTemp != sheep1Vert && 
                                     sheep1HorzTemp != sheep1Horz )
-                                if (sheep1HorzTemp < sheep1Horz + 1)
-                                    if (sheep1VertTemp > sheep1Vert - 1 && 
-                                            sheep1HorzTemp > sheep1HorzTemp -1)   
+                                if (sheep1VertTemp < sheep1Vert + 2 && 
+                                        sheep1HorzTemp < sheep1Horz + 2)
+                                    if (sheep1VertTemp > sheep1Vert - 2 && 
+                                            sheep1HorzTemp > sheep1Horz -2)   
                                     {
 
                                         // Transforma as próximas coordernadas 
@@ -296,7 +300,7 @@ namespace WolfAndSheep
 
                         else if(aux3 == "S2")
                         {
-                            Console.Write("You chose sheep 2");
+                            
                             // Pedir input ao jogador
                             Console.Write("Insert a vertical num: ");
                             aux1 = Console.ReadLine();
@@ -318,11 +322,12 @@ namespace WolfAndSheep
                             // e -1 na Vertical que a casa atual
                             if (sheep2VertTemp >= 0 && sheep2VertTemp <= 8 && 
                                 sheep2HorzTemp >= 0 && sheep2HorzTemp <= 8 )
-                            if (sheep1VertTemp != sheep1Vert && 
+                            if (sheep2VertTemp != sheep2Vert && 
                                     sheep2HorzTemp != sheep2Horz )
-                                if (sheep2HorzTemp < sheep2Horz + 1)
-                                    if (sheep2VertTemp > sheep2Vert - 1 && 
-                                            sheep2HorzTemp > sheep2HorzTemp -1)   
+                                if (sheep2VertTemp < sheep2Vert + 2 && 
+                                        sheep2HorzTemp < sheep2Horz + 2)
+                                    if (sheep2VertTemp > sheep2Vert - 2 && 
+                                            sheep2HorzTemp > sheep2Horz -2)  
                                     {
 
                                         // Transforma as próximas coordernadas 
@@ -349,7 +354,7 @@ namespace WolfAndSheep
                     
                         else if(aux3 == "S3")
                         {
-                            Console.Write("You chose sheep 3");
+                            
                             // Pedir input ao jogador
                             Console.Write("Insert a vertical num: ");
                             aux1 = Console.ReadLine();
@@ -373,9 +378,10 @@ namespace WolfAndSheep
                                 sheep3HorzTemp >= 0 && sheep3HorzTemp <= 8 )
                             if (sheep3VertTemp != sheep3Vert && 
                                     sheep3HorzTemp != sheep3Horz )
-                                if (sheep3HorzTemp < sheep3Horz + 1)
-                                    if (sheep3VertTemp > sheep3Vert - 1 && 
-                                            sheep3HorzTemp > sheep3HorzTemp -1)   
+                                if (sheep3VertTemp < sheep3Vert + 2 && 
+                                        sheep3HorzTemp < sheep3Horz + 2)
+                                    if (sheep3VertTemp > sheep3Vert - 2 && 
+                                            sheep3HorzTemp > sheep3Horz -2)   
                                     {
 
                                         // Transforma as próximas coordernadas 
@@ -403,7 +409,7 @@ namespace WolfAndSheep
                     
                         else if(aux3 == "S4")
                         {
-                            Console.Write("You chose sheep 4");
+                            
                             // Pedir input ao jogador
                             Console.Write("Insert a vertical num: ");
                             aux1 = Console.ReadLine();
@@ -427,9 +433,10 @@ namespace WolfAndSheep
                                 sheep4HorzTemp >= 0 && sheep4HorzTemp <= 8 )
                             if (sheep4VertTemp != sheep4Vert && 
                                     sheep4HorzTemp != sheep4Horz )
-                                if (sheep4HorzTemp < sheep4Horz + 1)
-                                    if (sheep4VertTemp > sheep4Vert - 1 && 
-                                            sheep4HorzTemp > sheep4HorzTemp -1)   
+                                if (sheep4VertTemp < sheep4Vert + 2 && 
+                                        sheep4HorzTemp < sheep4Horz + 2)
+                                    if (sheep4VertTemp > sheep4Vert - 2 && 
+                                            sheep4HorzTemp > sheep4Horz -2)   
                                     {
 
                                         // Transforma as próximas coordernadas 
@@ -445,7 +452,7 @@ namespace WolfAndSheep
                                             // define como playable = False
                                             sheep4Vert = sheep4VertTemp;
                                             sheep4Horz = sheep1HorzTemp;
-                                            board[sheep1Vert, sheep4Horz].
+                                            board[sheep4Vert, sheep4Horz].
                                                 isPlayable = false;
                                             break;
                                             
@@ -454,10 +461,10 @@ namespace WolfAndSheep
                         }
 
                         Console.WriteLine("Please choose a valid number");
-                    } while(board[sheep1Vert, sheep1Horz].isPlayable == false
-                        | board[sheep2Vert, sheep2Horz].isPlayable == false | 
-                        board[sheep3Vert, sheep3Horz].isPlayable == false | 
-                        board[sheep4Vert, sheep4Horz].isPlayable == false);
+                    } while(board[sheep1VertTemp, sheep1HorzTemp].isPlayable == false
+                        | board[sheep2VertTemp, sheep2HorzTemp].isPlayable == false | 
+                        board[sheep3VertTemp, sheep3HorzTemp].isPlayable == false | 
+                        board[sheep4VertTemp, sheep4HorzTemp].isPlayable == false);
 
                 }
 
