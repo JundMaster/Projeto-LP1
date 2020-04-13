@@ -19,15 +19,19 @@ namespace WolfAndSheep
         {
             Console.WriteLine("");
             Console.WriteLine("");
-            Console.WriteLine("Both animals can only move ONE square per turn");
+            Console.WriteLine("Both animals can only move" +
+                " ONE square per turn");
             Console.WriteLine("Sheep can only move forward.");
             Console.WriteLine("The wolf can move forward and backwards.");
             Console.WriteLine("Only ONE sheep can move per turn.");
-            Console.WriteLine("The animals can only move to numbered empty squares.");
+            Console.WriteLine("The animals can only move to numbered empty" + 
+                " squares.");
             Console.WriteLine("The wolf must reach the bottom squares.");
             Console.WriteLine("The flock of sheep must block wolf's path.");
-            Console.WriteLine("The flock of sheep win if they block wolf's path.");
-            Console.WriteLine("Players must type the square's number to move the animal.");
+            Console.WriteLine("The flock of sheep win if they block wolf's" +
+                " path.");
+            Console.WriteLine("Players must type the square's number to move" +
+                " the animal.");
 
             Console.WriteLine("");
             
@@ -51,18 +55,25 @@ namespace WolfAndSheep
             Square[,] board;
             board = new Square[8, 8];
 
-            // Varíaveis para o input do jogador
-            string aux1, aux2, aux3;
-
             // Variável para saber quando o jogo está a correr
             bool gameOver = false;
 
             // Variável para o número de jogadas
             int numberOfPlays = 0;
 
-            // Variáveis para o movimento do lobo
+            // Varíaveis temporárias para o input do jogador
+            string aux1, aux2, aux3;
+
+            // Variáveis para o input do jogador para o movimento do WOLF
+            int wolfVertTemp = 0;
+            int wolfHorzTemp = 0;
+
+            // Variáveis para a posição do WOLF
             int wolfVert = 0;
             int wolfHorz = 0;
+
+
+            // Variáveis para o movimento da SHEEP
             int sheep1Vert = 7;
             int sheep2Vert = 7;
             int sheep3Vert = 7;
@@ -72,7 +83,17 @@ namespace WolfAndSheep
             int sheep3Horz = 4;
             int sheep4Horz = 6;
 
-            // Posições de vitória para o lobo
+            // Variáveis para o input do jogador para o movimento do WOLF
+            int sheep1VertTemp = 0;
+            int sheep1HorzTemp = 0;
+            int sheep2VertTemp = 0;
+            int sheep2HorzTemp = 0;
+            int sheep3VertTemp = 0;
+            int sheep3HorzTemp = 0;
+            int sheep4VertTemp = 0;
+            int sheep4HorzTemp = 0;
+            
+            // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
             
 
@@ -85,8 +106,8 @@ namespace WolfAndSheep
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        // Cria uma instância da classe Square para cada ponto no 
-                        // tabuleiro
+                        // Cria uma instância da classe Square para cada ponto  
+                        // no tabuleiro
                         board[i,j] = new Square(i, j);
 
                         // Dá valores à row e column de cada instância do Square
@@ -112,7 +133,8 @@ namespace WolfAndSheep
                 // Apenas para a primeira jogada no jogo
                 if (numberOfPlays == 0)
                 {
-                    // Faz o loop do input do jogador ate colocar um Square válido
+                    // Faz o loop do input do jogador ate colocar um 
+                    // Square válido
                     do 
                     {
                         Console.WriteLine("");
@@ -132,22 +154,29 @@ namespace WolfAndSheep
 
                         // Se meter o número valido, sai do loop
                         if (board[wolfVert, wolfHorz].isPlayable)
+                        {
                             break;
+                        }
 
                         // Se não for válido vai repetir o processo
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
                 }
-                
+                    
 
                 // Jogadas para o WOLF
                 // Quando o numero de jogadas é ímpar
                 else if (numberOfPlays % 2 != 0)
+                {
                     do 
                     {
+                        // Define posição playable atual do WOLF como false
+                        board[wolfVert, wolfHorz].isPlayable = false;
+                        
                         Console.WriteLine("");
                         Console.WriteLine("");
                         Console.WriteLine("----------- WOLF TURN -----------");
+
                         // Pedir input ao jogador
                         Console.Write("Insert a vertical num: ");
                         aux1 = Console.ReadLine();
@@ -160,21 +189,49 @@ namespace WolfAndSheep
                             break;
                         }
                         
-                        //Converte a string do input para int
-                        wolfVert = Convert.ToInt16(aux1);
-                        wolfHorz = Convert.ToInt16(aux2);
-
-                        // Se meter o número valido, sai do loop
-                        if (board[wolfVert, wolfHorz].isPlayable)
-                            break;
+                        // Input temporário que serve para comparar com o antigo
+                        wolfVertTemp = Convert.ToInt16(aux1);
+                        wolfHorzTemp = Convert.ToInt16(aux2);
                         
-                        // Se não for válido vai repetir o processo
+                        // Se meter o número valido, sai do loop
+                        // Só aceita números com +1 ou -1 que a casa atual
+                        if (wolfVertTemp >= 0 && wolfVertTemp <= 8 && 
+                                wolfHorzTemp >= 0 && wolfHorzTemp <= 8 )
+                            if (wolfVertTemp != wolfVert && 
+                                    wolfHorzTemp != wolfHorz )
+                                if (wolfVertTemp < wolfVert + 2 && 
+                                        wolfHorzTemp < wolfHorz + 2)
+                                    if (wolfVertTemp > wolfVert - 2 && 
+                                            wolfHorzTemp > wolfHorz -2)
+                                    {
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[wolfVertTemp, wolfHorzTemp].
+                                                isPlayable)
+                                        {
+                                            // Define posição em que o WOLF 
+                                            // estava como playable = TRUE
+                                            board[wolfVert, wolfHorz].
+                                                    isPlayable = true;
+                                            // Define nova posição do lobo e
+                                            // define como playable = False
+                                            wolfVert = wolfVertTemp;
+                                            wolfHorz = wolfHorzTemp;
+                                            board[wolfVert, wolfHorz].
+                                                isPlayable = false;
+                                            break;
+                                            
+                                        }
+                                    }
+                        // Se não for válido vai repetir o loop
                         Console.WriteLine("Please choose a valid number");
                     } while(board[wolfVert, wolfHorz].isPlayable == false);
-
+                }
+                
 
                 // Jogadas para A SHEEP
-                // Quando o numero de jogadas é ímpar
+                // Quando o numero de jogadas é par
                 else if (numberOfPlays % 2 == 0)
                 {
                     do
@@ -205,12 +262,36 @@ namespace WolfAndSheep
                             sheep1Horz = Convert.ToInt16(aux2);
 
                             // Se meter o número valido, sai do loop
-                            if (board[sheep1Vert, sheep1Horz].isPlayable)
-                                break;
-                            
-                            // Se não for válido vai repetir o processo
-                            Console.WriteLine("Please choose a valid number");
-                            board[sheep1Vert, sheep1Horz].animal = "Sheep_01";
+                            // Só aceita números com +1 ou -1 na Horizontal
+                            // e -1 na Vertical que a casa atual
+                            if (sheep1VertTemp >= 0 && sheep1VertTemp <= 8 && 
+                                sheep1HorzTemp >= 0 && sheep1HorzTemp <= 8 )
+                            if (sheep1VertTemp != sheep1Vert && 
+                                    sheep1HorzTemp != sheep1Horz )
+                                if (sheep1HorzTemp < sheep1Horz + 1)
+                                    if (sheep1VertTemp > sheep1Vert - 1 && 
+                                            sheep1HorzTemp > sheep1HorzTemp -1)   
+                                    {
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[sheep1VertTemp, sheep1HorzTemp].
+                                                isPlayable)
+                                        {
+                                            // Define posição em que o WOLF 
+                                            // estava como playable = TRUE
+                                            board[sheep1Vert, sheep1Horz].
+                                                    isPlayable = true;
+                                            // Define nova posição do lobo e
+                                            // define como playable = False
+                                            sheep1Vert = sheep1VertTemp;
+                                            sheep1Horz = sheep1HorzTemp;
+                                            board[sheep1Vert, sheep1Horz].
+                                                isPlayable = false;
+                                            break;
+                                            
+                                        }
+                                    }                         
                         }
 
                         else if(aux3 == "S2")
@@ -231,14 +312,39 @@ namespace WolfAndSheep
                             //Converte a string do input para int
                             sheep2Vert = Convert.ToInt16(aux1);
                             sheep2Horz = Convert.ToInt16(aux2);
-
-                            // Se meter o número valido, sai do loop
-                            if (board[sheep2Vert, sheep2Horz].isPlayable)
-                                break;
                             
-                            // Se não for válido vai repetir o processo
-                            Console.WriteLine("Please choose a valid number");
-                            board[sheep2Vert, sheep2Horz].animal = "Sheep_02";
+                            // Se meter o número valido, sai do loop
+                            // Só aceita números com +1 ou -1 na Horizontal
+                            // e -1 na Vertical que a casa atual
+                            if (sheep2VertTemp >= 0 && sheep2VertTemp <= 8 && 
+                                sheep2HorzTemp >= 0 && sheep2HorzTemp <= 8 )
+                            if (sheep1VertTemp != sheep1Vert && 
+                                    sheep2HorzTemp != sheep2Horz )
+                                if (sheep2HorzTemp < sheep2Horz + 1)
+                                    if (sheep2VertTemp > sheep2Vert - 1 && 
+                                            sheep2HorzTemp > sheep2HorzTemp -1)   
+                                    {
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[sheep2VertTemp, sheep2HorzTemp].
+                                                isPlayable)
+                                        {
+                                            // Define posição em que o WOLF 
+                                            // estava como playable = TRUE
+                                            board[sheep2Vert, sheep2Horz].
+                                                    isPlayable = true;
+                                            // Define nova posição do lobo e
+                                            // define como playable = False
+                                            sheep2Vert = sheep2VertTemp;
+                                            sheep2Horz = sheep2HorzTemp;
+                                            board[sheep2Vert, sheep2Horz].
+                                                isPlayable = false;
+                                            break;
+                                            
+                                        }
+                                    }                         
+                            
                         }
                     
                         else if(aux3 == "S3")
@@ -261,12 +367,38 @@ namespace WolfAndSheep
                             sheep3Horz = Convert.ToInt16(aux2);
 
                             // Se meter o número valido, sai do loop
-                            if (board[sheep3Vert, sheep3Horz].isPlayable)
-                                break;
+                            // Só aceita números com +1 ou -1 na Horizontal
+                            // e -1 na Vertical que a casa atual
+                            if (sheep3VertTemp >= 0 && sheep3VertTemp <= 8 && 
+                                sheep3HorzTemp >= 0 && sheep3HorzTemp <= 8 )
+                            if (sheep3VertTemp != sheep3Vert && 
+                                    sheep3HorzTemp != sheep3Horz )
+                                if (sheep3HorzTemp < sheep3Horz + 1)
+                                    if (sheep3VertTemp > sheep3Vert - 1 && 
+                                            sheep3HorzTemp > sheep3HorzTemp -1)   
+                                    {
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[sheep3VertTemp, sheep3HorzTemp].
+                                                isPlayable)
+                                        {
+                                            // Define posição em que o WOLF 
+                                            // estava como playable = TRUE
+                                            board[sheep3Vert, sheep3Horz].
+                                                    isPlayable = true;
+                                            // Define nova posição do lobo e
+                                            // define como playable = False
+                                            sheep3Vert = sheep3VertTemp;
+                                            sheep3Horz = sheep3HorzTemp;
+                                            board[sheep3Vert, sheep3Horz].
+                                                isPlayable = false;
+                                            break;
+                                            
+                                        }
+                                    }                         
                             
-                            // Se não for válido vai repetir o processo
-                            Console.WriteLine("Please choose a valid number");
-                            board[sheep3Vert, sheep3Horz].animal = "Sheep_03";
+
                         }
                     
                         else if(aux3 == "S4")
@@ -289,14 +421,39 @@ namespace WolfAndSheep
                             sheep4Horz = Convert.ToInt16(aux2);
 
                             // Se meter o número valido, sai do loop
-                            if (board[sheep4Vert, sheep4Horz].isPlayable)
-                                break;
-                            
-                            // Se não for válido vai repetir o processo
-                            Console.WriteLine("Please choose a valid number");
-                            board[sheep4Vert, sheep4Horz].animal = "Sheep_04";
+                            // Só aceita números com +1 ou -1 na Horizontal
+                            // e -1 na Vertical que a casa atual
+                            if (sheep4VertTemp >= 0 && sheep4VertTemp <= 8 && 
+                                sheep4HorzTemp >= 0 && sheep4HorzTemp <= 8 )
+                            if (sheep4VertTemp != sheep4Vert && 
+                                    sheep4HorzTemp != sheep4Horz )
+                                if (sheep4HorzTemp < sheep4Horz + 1)
+                                    if (sheep4VertTemp > sheep4Vert - 1 && 
+                                            sheep4HorzTemp > sheep4HorzTemp -1)   
+                                    {
+
+                                        // Transforma as próximas coordernadas 
+                                        // nas do input do utilizador
+                                        if (board[sheep4VertTemp, sheep4HorzTemp].
+                                                isPlayable)
+                                        {
+                                            // Define posição em que o WOLF 
+                                            // estava como playable = TRUE
+                                            board[sheep4Vert, sheep4Horz].
+                                                    isPlayable = true;
+                                            // Define nova posição do lobo e
+                                            // define como playable = False
+                                            sheep4Vert = sheep4VertTemp;
+                                            sheep4Horz = sheep1HorzTemp;
+                                            board[sheep1Vert, sheep4Horz].
+                                                isPlayable = false;
+                                            break;
+                                            
+                                        }
+                                    }                         
                         }
 
+                        Console.WriteLine("Please choose a valid number");
                     } while(board[sheep1Vert, sheep1Horz].isPlayable == false
                         | board[sheep2Vert, sheep2Horz].isPlayable == false | 
                         board[sheep3Vert, sheep3Horz].isPlayable == false | 
@@ -316,7 +473,7 @@ namespace WolfAndSheep
                 
                 
 
-
+                
 
                 // Imprime o tabuleiro
                 
@@ -325,16 +482,19 @@ namespace WolfAndSheep
                 Console.WriteLine("Numbers = Playable Squares");
                 Console.WriteLine("Black Spaces = Unplayable Squares");
                 Console.WriteLine("exit  <- to quit the game");
+
+                // So para testar ------------------------------------------------------------------------
+                Console.WriteLine("");
+                Console.WriteLine($"TESTE - WOLF PLAYABLE: {board[wolfVert, wolfHorz].isPlayable}, {board[wolfVert, wolfHorz].row}, {board[wolfVert, wolfHorz].column}");
+                
                 for (int i = 0; i < 8; i++)
                 {
                     Console.WriteLine("");
                     for (int j = 0; j < 8; j++)
                     {
-                        
-
                         // Imprime o WOLF em vez dos números e coloca esse mesmo
                         // Square.isPlayable como falso
-                        if (board[i,j].animal == "Wolf" && board[i,j].isPlayable)
+                        if (board[i,j].animal == "Wolf")
                         {
                             Console.Write("WW");
                             board[i,j].isPlayable = false;
@@ -391,7 +551,10 @@ namespace WolfAndSheep
                 foreach (int x in wolfVictoryPositions)
                 {
                     if (board[7,x].animal == "Wolf")
+                    {
                         victory("Wolf", numberOfPlays);
+                        gameOver = true;
+                    }
                 }
             }
         }
@@ -413,9 +576,7 @@ namespace WolfAndSheep
         {
             row = x;
             column = y;
-
         }
     }
         
-    
 }
