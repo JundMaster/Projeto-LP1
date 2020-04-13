@@ -510,7 +510,7 @@ namespace WolfAndSheep
                                             // Define nova posição do lobo e
                                             // define como playable = False
                                             sheep4Vert = sheep4VertTemp;
-                                            sheep4Horz = sheep1HorzTemp;
+                                            sheep4Horz = sheep4HorzTemp;
                                             board[sheep4Vert, sheep4Horz].
                                                 isPlayable = false;
                                             break;
