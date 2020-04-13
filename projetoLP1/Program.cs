@@ -58,39 +58,52 @@ namespace projetoLP1
 
             // keeps track of the drawn line (NOT THE BOARD LINES)
             int lineCounter = 0;
+            // keeps track of the number of lines on the board
             int boardLineNum = 1;
             int j;
             int lineModifier = 3;
-            int identifierNum = 0;
             int numCount = 1;
-            bool drawWolf = true;
             int wolfLine = 1;
             int wolfColumn = 2;
+            int auxWolfColumn = 2;
+            int lastWolfLine = 1;
+            int lastWolfColumn = 2;
             bool done = false;
 
             while (done == false)
             {
+                
 
-                // Console.WriteLine(ArithProg(5));
-                if (wolfLine % 2 == 0 && wolfColumn % 2 == 0)
+                Console.WriteLine(auxWolfColumn - lastWolfColumn);
+
+                if ((auxWolfColumn - lastWolfColumn) <= -2 || (auxWolfColumn - lastWolfColumn) >= 2 || (wolfLine - lastWolfLine) <= -2 || (wolfLine - lastWolfLine) >= 2)
                 {
-                    drawWolf = false;
+                    Console.WriteLine("That's not a valid move.");
+                    wolfLine = lastWolfLine;
+                    auxWolfColumn = lastWolfColumn;
                 }
-                else
+
+                // Verifies if user is trying to go to a valid square
+                if (wolfLine % 2 == 0 && auxWolfColumn % 2 == 0)
                 {
-                    drawWolf = true;
+                    // drawWolf = false;
+                    Console.WriteLine($"{wolfLine}, {auxWolfColumn} is not a valid square;");
+                    wolfLine = lastWolfLine;
+                    auxWolfColumn = lastWolfColumn;
+
                 }
+
 
                 if (wolfLine % 2 != 0)
                 {
-                    if (wolfColumn % 2 == 0)
+                    if (auxWolfColumn % 2 == 0)
                     {
-                        wolfColumn = wolfColumn / 2;
+                        wolfColumn = auxWolfColumn / 2;
                     }
                 }
                 else
                 {
-                    wolfColumn = ArithProg(wolfColumn);
+                    wolfColumn = ArithProg(auxWolfColumn);
                 }
 
                 Console.WriteLine("       1      2      3      4      5      6      7      8");
@@ -124,7 +137,7 @@ namespace projetoLP1
                         {
                             
                             // checks if the loop is in the middle of the square and, if the wolf is there, i'll be drawn on the square
-                            if ((numCount == 1 && i != 0) && (j == wolfColumn - 1) && (boardLineNum) == wolfLine && drawWolf == true)
+                            if ((numCount == 1 && i != 0) && (j == wolfColumn - 1) && (boardLineNum) == wolfLine)
                             {
                                 Console.Write(wolfString1);
                                 
@@ -141,7 +154,7 @@ namespace projetoLP1
                         {
                             
                             // checks if the loop is in the middle of the square and, if the wolf is there, i'll be drawn on the square
-                            if ((numCount == 1 && i != 0) && (j == wolfColumn - 1) && (boardLineNum) == wolfLine && drawWolf == true)
+                            if ((numCount == 1 && i != 0) && (j == wolfColumn - 1) && (boardLineNum) == wolfLine)
                             {
                                 Console.Write(wolfString2);
                             }
@@ -177,10 +190,17 @@ namespace projetoLP1
                 lineCounter = 0;
                 Console.WriteLine("  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  *  * *");
                 Console.WriteLine("");
+                lastWolfLine = wolfLine;
+                lastWolfColumn = auxWolfColumn;
+                Console.WriteLine($"{lastWolfLine}, {lastWolfColumn}");
                 Console.Write("Insert line number: ");
                 wolfLine = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Insert Column number: ");
-                wolfColumn = Convert.ToInt32(Console.ReadLine());
+                auxWolfColumn = Convert.ToInt32(Console.ReadLine());
+
+
+
+
             }
 
 
