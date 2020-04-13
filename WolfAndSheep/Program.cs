@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq.Expressions;
+using System;
 
 namespace WolfAndSheep
 {
@@ -85,11 +86,12 @@ namespace WolfAndSheep
 
             // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
+
+            const string errorMessage = "----------- Error Message -----------";
             
 
             while (gameOver == false)
             {
-                
                 // cria o board com a classe Square
                 // Criação de cada Square
                 for (int i = 0; i < 8; i++)
@@ -180,8 +182,55 @@ namespace WolfAndSheep
                         }
                         
                         // Input temporário que serve para comparar com o antigo
-                        wolfVertTemp = Convert.ToInt16(aux1);
-                        wolfHorzTemp = Convert.ToInt16(aux2);
+
+
+                        try
+                        {
+                            wolfVertTemp = Convert.ToInt16(aux1);
+                        }
+                        // Aparece uma mensagem para inserir um número válido
+                        // caso o jogador insira um número muito grande
+                        catch (OverflowException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("Please insert a valid number.");
+                            continue;
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("The input must be a valid line number"+
+                            "or the 'exit' command.");
+                            continue;
+                        }
+
+                        try
+                        {
+                            wolfHorzTemp = Convert.ToInt16(aux2);
+                        }
+                        // Aparece uma mensagem para inserir um número válido
+                        // caso o jogador insira um número muito grande
+                        catch (OverflowException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("Please insert a valid number.");
+                            continue;
+                        }
+                        
+                        catch (FormatException)
+                        {
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("");
+                            Console.WriteLine("The input must be a valid line number"+
+                            "or the 'exit' command.");
+                            continue;
+                        }
+
+                        
+                        
                         
                         // Se meter o número valido, sai do loop
                         // Só aceita números com +1 ou -1 que a casa atual
