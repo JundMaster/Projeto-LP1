@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System.Buffers;
+using System.ComponentModel;
+using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization.Json;
 using System.Reflection;
@@ -46,10 +48,6 @@ namespace projetoLP1
     {
         static void Main(string[] args)
         {
-
-            
-            
-            
             static int ArithProg(int a_n)
             {
                 int n = (a_n + 1)/2;
@@ -85,48 +83,6 @@ namespace projetoLP1
                 Console.WriteLine(division);
                 
             }
-
-            // static int[] InputDealer(int round)
-            // {
-                
-            //     if (round % 2 == 0 && round != 0)
-            //     {
-            //         string aux1;
-            //         string aux2;
-            //         int wolfLine, auxWolfColumn;
-            //         // code to deal with the input for the wolf
-
-            //         do 
-            //         {
-            //             // Pedir input ao jogador
-            //             Console.Write("Insert line number: ");
-
-            //             aux1 = Console.ReadLine();
-            //             Console.Write("Insert Column number: ");
-            //             aux2 = Console.ReadLine();
-                        
-            //             //Converte a string do input para int
-            //             wolfLine = Convert.ToInt16(aux1);
-            //             auxWolfColumn = Convert.ToInt16(aux2);
-                        
-            //             // Se meter o número valido, sai do loop
-            //             if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable)
-            //                 break;
-                        
-            //             // Se não for válido vai repetir o processo
-            //             Console.WriteLine("Please choose a valid number");
-            //         } while(board[wolfLine - 1, auxWolfColumn - 1].isPlayable == false);
-
-            //         board[wolfLine - 1, auxWolfColumn - 1].animal = "Wolf";
-            //     }
-            //     else
-            //     {
-            //         // code to deal with the sheep input
-            //     }
-            // }
-
-
-            
             // white square lines
             string patternString = new string(String.Concat(Enumerable.Repeat("#", 7)));
             // black square lines
@@ -190,73 +146,118 @@ namespace projetoLP1
             }
 
 
-            while (gameOver == false)
+            int[] InputDealer(int round, int lastWolfLine, int lastWolfColumn)
             {
-
-                while (round == 0)
+                string aux1;
+                string aux2;
+                wolfLine = 1; 
+                auxWolfColumn = 1;
+                // int[] wolfCoords = new int[2] {wolfLine, auxWolfColumn};
+                int[] wolfCoords = new int[4];
+                if (round % 2 == 0 || round % 2 != 0)
                 {
-                    Console.WriteLine("Where do you want the wolf to start from?");
-                        string aux1;
-                        string aux2;
-                        // Pedir input ao jogador
+                    // code to deal with the input for the wolf
+                    while(board[wolfLine - 1, auxWolfColumn - 1].isPlayable == false)
+                    {
+                        if (round == 0)
+                            Console.WriteLine("Where do you want the wolf to start from?");
+                        
+                        // Ask to insert line
                         Console.Write("Insert line number: ");
-                        // wolfLine = Convert.ToInt32(Console.ReadLine());
                         aux1 = Console.ReadLine();
+                        // Ask to insert column 
                         Console.Write("Insert Column number: ");
                         aux2 = Console.ReadLine();
-                        // auxWolfColumn = Convert.ToInt32(Console.ReadLine());
 
-                        // Se escrever exit, sai do jogo
-                        if (aux1 == "exit" || aux2 == "exit")
-                        {
-                            gameOver = true;
-                            break;  
-                        }
-                        
-                        //Converte a string do input para int
+                        //Convert string input to short
                         wolfLine = Convert.ToInt16(aux1);
                         auxWolfColumn = Convert.ToInt16(aux2);
+                        
+                        Console.WriteLine("playable: {0}", board[wolfLine - 1, auxWolfColumn - 1].isPlayable);
 
-                        if(wolfLine > 1)
+                        // Deal with the general wolf positioning
+                        if (round != 0)
                         {
-                            InvalidMove("firstMove");
-                            // Console.WriteLine("The wolf can only start on the 1st line.");
-                            continue;
-                        }
+                            // If the insert coordinates are valid the loop breaks
+
+                            if (lastWolfLine == wolfLine && lastWolfColumn == auxWolfColumn)
+                                InvalidMove("sameSquare");
+
+                            else if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable)
+                                {
+                                    wolfCoords[0] = wolfLine;
+                                    wolfCoords[1] = auxWolfColumn;
+                                }
                             
+                            Console.WriteLine("lastWolfLine: {0} | lastWolfColumn: {1}", lastWolfLine,lastWolfColumn);
+                            if ((auxWolfColumn - lastWolfColumn) <= -2 || 
+                                (auxWolfColumn - lastWolfColumn) >= 2 || 
+                                (wolfLine - lastWolfLine) <= -2 || 
+                                (wolfLine - lastWolfLine) >= 2)
+                                {
+                                    InvalidMove("unavailableSquare");
+                                    wolfLine = lastWolfLine;
+                                    auxWolfColumn = lastWolfColumn;
+                                    continue;
+                                }
+                        }
+
+                        // Deal with the wolf initial positioning
                         else
                         {
-                            lastWolfLine = wolfLine;
-                            lastWolfColumn = auxWolfColumn;
-                            break;
+                                if(wolfLine > 1)
+                                {
+                                    InvalidMove("firstMove");
+                                    continue;
+                                }
+                                    
+                                else if (auxWolfColumn % 2 == 0)
+                                {
+                                    lastWolfLine = wolfLine;
+                                    lastWolfColumn = auxWolfColumn;
+                                    wolfCoords[0] = wolfLine;
+                                    wolfCoords[1] = auxWolfColumn;
+                                    wolfCoords[2] = lastWolfLine;
+                                    wolfCoords[3] = lastWolfColumn;
+                                    break;
+                                }
+
                         }
-
+                    } 
+                    board[wolfLine - 1, auxWolfColumn - 1].animal = "Wolf";
+                    // wolfCoords = new int [2] {wolfLine, auxWolfColumn};
+                    return wolfCoords;
                 }
-                
-                // Verifies if user is going out of boundaries  
-                if ((auxWolfColumn - lastWolfColumn) <= -2 || (auxWolfColumn - lastWolfColumn) >= 2 || 
-                (wolfLine - lastWolfLine) <= -2 || (wolfLine - lastWolfLine) >= 2)
+
+                else
                 {
-                    InvalidMove("farSquare");
-                    // Console.WriteLine("That's not a valid move.");
+                    wolfCoords[0] = 1;
+                    wolfCoords[1] = 2;
+                    return wolfCoords;
+                    // code to deal with the sheep input    
+                }
+            }
 
-                    // Keeps the wolf at the same square, not considering the invalid input to move the it
-                    wolfLine = lastWolfLine;
-                    auxWolfColumn = lastWolfColumn;
+            // InputDealer(0);
+            int [] test = new int [4];
+            int [] coordinates = new int [4];
+
+            Console.WriteLine("loop broken");
+            
+
+            while (gameOver == false)
+            {
+                if (round == 0)
+                {   
+                    InputDealer(round, 1, 1).CopyTo(coordinates, 0);
+                    wolfLine = coordinates[0];
+                    auxWolfColumn = coordinates[1];
+                    lastWolfLine = coordinates[2];
+                    lastWolfColumn = coordinates[3];
+                    round++;
                 }
 
-                // Verifies if user is trying to go to a white square
-                 
-                if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable == false)
-                {
-                    // drawWolf = false;
-                    Console.WriteLine($"{wolfLine}, {auxWolfColumn} is not a valid square;");
-                    wolfLine = lastWolfLine;
-                    auxWolfColumn = lastWolfColumn;
-
-                }
-
-
+        
                 if (wolfLine % 2 != 0)
                 {
                     if (auxWolfColumn % 2 == 0)
@@ -318,6 +319,8 @@ namespace projetoLP1
                                 board[lastWolfLine - 1, lastWolfColumn - 1].isPlayable = true;
                                 board[wolfLine - 1, auxWolfColumn - 1].isPlayable = false;
                                 Console.Write(wolfString2);
+                                
+                                
                             }
                             // draws the lines of the board lines if it starts with a black square
                             else
@@ -332,19 +335,15 @@ namespace projetoLP1
                     
                     // increments the line counter
                     lineCounter++;
-                    // Console.Write("  lineCounter: {0}", lineCounter);
-
+                    
                     // when the line counter is a multiple of 3, it means that a board line was fully drawn
                     if (lineCounter % 3 == 0)
                     {   
                         // increments the BOARD line numbers
                         boardLineNum++;
                     }
-                    
-                
                     Console.WriteLine("");
                 }
-
 
                 boardLineNum = 1;
                 lineCounter = 0;
@@ -353,63 +352,14 @@ namespace projetoLP1
                 Console.WriteLine("round: {0}", round);
                 lastWolfLine = wolfLine;
                 lastWolfColumn = auxWolfColumn;
-                    do 
-                    {
-                        Console.WriteLine("");
-                        Console.WriteLine("");
-                        
-                        Console.WriteLine("----------- WOLF TURN -----------");
-                        string aux1;
-                        string aux2;
-                        // Pedir input ao jogador
-                        Console.Write("Insert line number: ");
-                        // wolfLine = Convert.ToInt32(Console.ReadLine());
-                        aux1 = Console.ReadLine();
-                        Console.Write("Insert Column number: ");
-                        aux2 = Console.ReadLine();
-                        // auxWolfColumn = Convert.ToInt32(Console.ReadLine());
-
-                        // Se escrever exit, sai do jogo
-                        if (aux1 == "exit" || aux2 == "exit")
-                        {
-                            gameOver = true;
-                            break;  
-                        }
-                        
-                        //Converte a string do input para int
-                        wolfLine = Convert.ToInt16(aux1);
-                        auxWolfColumn = Convert.ToInt16(aux2);
-                        // Se meter o número valido, sai do loop
-                        if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable)
-                            {
-                                round++;
-                                break;
-                            }
-                        
-                        if (lastWolfLine == wolfLine && lastWolfColumn == auxWolfColumn)
-                            InvalidMove("sameSquare");
-                            // Console.WriteLine("Please, choose a different squere.");
-
-                        else
-                            // Se não for válido vai repetir o processo
-                            InvalidMove("unavailableSquare");
-                            // Console.WriteLine("Please choose a valid number");
-                    } while(board[wolfLine - 1, auxWolfColumn - 1].isPlayable == false);
-
-                    board[wolfLine - 1, auxWolfColumn - 1].animal = "Wolf";
-
- 
-                
-                // wolfLine = Convert.ToInt32(Console.ReadLine());
-                
-                // auxWolfColumn = Convert.ToInt32(Console.ReadLine());
-
-
-
-
+                // Gets user input
+                InputDealer(round, lastWolfLine, lastWolfColumn).CopyTo(coordinates, 0);
+                wolfLine = coordinates[0];
+                auxWolfColumn = coordinates[1];
+                // increments rounds
+                if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable)
+                    round++;
             }   
-
-
         }
     }
 }
