@@ -161,35 +161,37 @@ namespace projetoLP1
             Square[,] board;
             board = new Square[8, 8];
 
+
+            // cria o board com a classe Square
+            // Criação de cada Square
+            for (int i = 0; i < 8; i++)
+            {
+                for (j = 0; j < 8; j++)
+                {
+                    // Cria uma instância da classe Square para cada ponto  
+                    // no tabuleiro
+                    board[i,j] = new Square(i, j);
+
+                    // Dá valores à line e column de cada instância do Square
+                    board[i,j].line = i;
+                    board[i,j].column = j;
+
+                    // Se o Square for BRANCO não é playable
+                    // Todos os pares (é branco)
+                    if (i % 2 == 0 && j % 2 == 0)
+                        board[i,j].isPlayable = false;
+                    // Todos os ímpares (é branco)
+                    else if (i % 2 != 0 && j % 2 != 0)
+                        board[i,j].isPlayable = false;
+                    // Resto dos quadrados (é preto)
+                    else
+                        board[i,j].isPlayable = true;
+                }
+            }
+
+
             while (gameOver == false)
             {
-
-                // cria o board com a classe Square
-                // Criação de cada Square
-                for (int i = 0; i < 8; i++)
-                {
-                    for (j = 0; j < 8; j++)
-                    {
-                        // Cria uma instância da classe Square para cada ponto  
-                        // no tabuleiro
-                        board[i,j] = new Square(i, j);
-
-                        // Dá valores à line e column de cada instância do Square
-                        board[i,j].line = i;
-                        board[i,j].column = j;
-
-                        // Se o Square for BRANCO não é playable
-                        // Todos os pares (é branco)
-                        if (i % 2 == 0 && j % 2 == 0)
-                            board[i,j].isPlayable = false;
-                        // Todos os ímpares (é branco)
-                        else if (i % 2 != 0 && j % 2 != 0)
-                            board[i,j].isPlayable = false;
-                        // Resto dos quadrados (é preto)
-                        else
-                            board[i,j].isPlayable = true;
-                    }
-                }
 
                 while (round == 0)
                 {
