@@ -4,6 +4,26 @@ namespace WolfAndSheep
 {
     class Program
     {
+            // Variáveis para o input do jogador para o movimento do WOLF
+           static int [] wolfTempPos = new int[2] {0, 0};
+
+           // Variáveis para a posição atual do WOLF
+            static int [] wolfPos = new int[2] {0, 0};
+
+            // Declarar variáveis
+            // Cria uma array de Squares
+            static Square[,] board;
+
+            // Variáveis para a posição atual da Sheep
+            private static int [] sheep1Pos = new int[2] {2, 1};
+            private static int [] sheep2Pos = new int[2] {1, 2};
+            private static int [] sheep3Pos = new int[2] {7, 4};
+            private static int [] sheep4Pos = new int[2] {7, 6};
+
+            // Variáveis para o input do jogador para o movimento da Sheep
+            private static int [] sheepTempPos = new int[2] {0, 0};
+            private static int [] sheepNewPos = new int[2] {0, 0};
+           
         static void Main(string[] args)
         {
 
@@ -17,10 +37,10 @@ namespace WolfAndSheep
 
         private static void game()
         {
-            // Declarar variáveis
+            /* // Declarar variáveis
             // Cria uma array de Squares
-            Square[,] board;
-            board = new Square[8, 8];
+            Square[,] board;*/
+            board = new Square[8, 8]; 
 
             // Variável para saber quando o jogo está a correr
             bool gameOver = false;
@@ -31,11 +51,11 @@ namespace WolfAndSheep
             // Varíaveis temporárias para o input do jogador
             string aux1, aux2, aux3;
 
-            // Variáveis para o input do jogador para o movimento do WOLF
-            int [] wolfTempPos = new int[2] {0, 0};
+           /*  // Variáveis para o input do jogador para o movimento do WOLF
+            int [] wolfTempPos = new int[2] {0, 0}; */
 
-            // Variáveis para a posição atual do WOLF
-            int [] wolfPos = new int[2] {0, 0};
+            /* // Variáveis para a posição atual do WOLF
+            int [] wolfPos = new int[2] {0, 0}; */
 
             // Todos os quadrados playable à volta do lobo
             int wolfNextRow = wolfPos[0] +1;
@@ -43,15 +63,15 @@ namespace WolfAndSheep
             int wolfNextRowNeg = wolfPos[0] -1;
             int wolfNextColumnNeg = wolfPos[1] -1;
 
-            // Variáveis para o input do jogador para o movimento da Sheep
+            /* // Variáveis para o input do jogador para o movimento da Sheep
             int [] sheepTempPos = new int[2] {0, 0};
-            int [] sheepNewPos = new int[2] {0, 0};
+            int [] sheepNewPos = new int[2] {0, 0}; */
 
-            // Variáveis para a posição atual da Sheep
-            int [] sheep1Pos = new int[2] {7, 0};
-            int [] sheep2Pos = new int[2] {7, 2};
+            /* // Variáveis para a posição atual da Sheep
+            int [] sheep1Pos = new int[2] {2, 1};
+            int [] sheep2Pos = new int[2] {1, 2};
             int [] sheep3Pos = new int[2] {7, 4};
-            int [] sheep4Pos = new int[2] {7, 6};
+            int [] sheep4Pos = new int[2] {7, 6}; */
            
             // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
@@ -141,7 +161,15 @@ namespace WolfAndSheep
                     {
                         Console.WriteLine(" ");
                         Console.WriteLine("----------- WOLF TURN -----------");
-                        
+                        if (WolfEndGame())
+                        {
+                            
+                            victory("Wolf", numberOfPlays);
+                            gameOver = true;
+                            break;
+                            
+
+                        }
                         // Pedir input ao jogador
                         Console.Write("Insert a row number: ");
                         aux1 = Console.ReadLine();
@@ -201,14 +229,10 @@ namespace WolfAndSheep
                         
                         // Se meter o número valido, sai do loop
                         // Só aceita números com +1 ou -1 que a casa atual
-                        if (wolfTempPos[0] >= 0 && wolfTempPos[0] <= 8 && 
-                                wolfTempPos[1] >= 0 && wolfTempPos[1] <= 8 )
-                            if (wolfTempPos[0] != wolfPos[0] && 
-                                    wolfTempPos[1] != wolfPos[1] )
-                                if (wolfTempPos[0] < wolfPos[0] + 2 && 
-                                        wolfTempPos[1] < wolfPos[1] + 2)
-                                    if (wolfTempPos[0] > wolfPos[0] - 2 && 
-                                            wolfTempPos[1] > wolfPos[1] -2)
+                        if (isInputInBoard())
+                            if (isInputDifferentHouse())
+                                if (isInputLegalForward())
+                                    if (isInputLegalBackwards())
                                     {
 
                                         // Transforma as próximas cordernadas 
@@ -262,11 +286,15 @@ namespace WolfAndSheep
                     Console.WriteLine("----------- FLOCK TURN -----------");
                     Console.WriteLine("Choose a Sheep to play:\n");
                     Console.WriteLine("-- S1     S2     S3    S4 --");
-                    aux3 = Console.ReadLine();
-                    Console.Write($"You chose {aux3}\n");
+                    
                     do
                     {
-                       switch (aux3)
+                        aux3 = Console.ReadLine().ToUpper();
+                        Console.Write($"You chose {aux3}\n");
+                        sheepChosen(aux3);
+
+
+                       /* switch (aux3))
                        {
                             case "S1":
                                 sheepNewPos[0] = sheep1Pos[0];
@@ -283,12 +311,12 @@ namespace WolfAndSheep
                             case "S4":
                                 sheepNewPos[0] = sheep4Pos[0];
                                 sheepNewPos[1] = sheep4Pos[1];
-                            break;
+                                break;
                             default:
                                 Console.WriteLine("Error");
-                            break;
+                                break; 
 
-                       }
+                       }*/
                             // Pedir input ao jogador
                             Console.Write("Insert a vertical num: ");
                             aux1 = Console.ReadLine();
@@ -422,6 +450,28 @@ namespace WolfAndSheep
             Console.WriteLine($"Number of total plays = {plays}");
         }
 
+        private static bool isInputInBoard()
+        {   
+            return wolfTempPos[0] >= 0 && wolfTempPos[0] <= 8 && 
+                wolfTempPos[1] >= 0 && wolfTempPos[1] <= 8;
+        }
+        
+        private static bool isInputDifferentHouse()
+        {
+            return wolfTempPos[0] != wolfPos[0] && wolfTempPos[1] != wolfPos[1]; 
+        }
+        
+        private static bool isInputLegalForward()
+        {
+            return wolfTempPos[0] < wolfPos[0] + 2 && 
+                wolfTempPos[1] < wolfPos[1] + 2;
+        }
+
+        private static bool isInputLegalBackwards()
+        {
+            return wolfTempPos[0] > wolfPos[0] - 2 && 
+                wolfTempPos[1] > wolfPos[1] -2;
+        }
         static void printBoard(Square[,] board)
         {
                 // Imprime o tabuleiro
@@ -454,40 +504,43 @@ namespace WolfAndSheep
                             
                                 // Imprime o WOLF em vez dos números
                                 if (board[i,j].animal == "Wolf")
-                                    Console.Write(" WWWW ");
+                                    if (boardTemp == 1)
+                                        Console.Write("  WW  ");
+                                    else
+                                    Console.Write("      ");
 
                                 // Imprime a SHEEP em vez dos números
                                 // Imprime SHEEP em sinal de Mais
                                 else if (board[i,j].animal == "Sheep_01")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("S1S1S1");
+                                        Console.Write("  S1  ");
                                     else
-                                    Console.Write("  S1  ");
+                                    Console.Write("      ");
                                 }
 
                                 else if (board[i,j].animal == "Sheep_02")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("S2S2S2");
+                                        Console.Write("  S2  ");
                                     else
-                                    Console.Write("  S2  ");
+                                    Console.Write("      ");
                                 }
 
                                 else if (board[i,j].animal == "Sheep_03")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("S3S3S3");
+                                        Console.Write("  S3  ");
                                     else
-                                    Console.Write("  S3  ");
+                                    Console.Write("      ");
                                 }
 
                                 else if (board[i,j].animal == "Sheep_04")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("S4S4S4");
+                                        Console.Write("  S4  ");
                                     else
-                                    Console.Write("  S4  ");
+                                    Console.Write("      ");
                                 }
                                     
                                 // Se der para jogar imprime a linha e a coluna
@@ -521,9 +574,66 @@ namespace WolfAndSheep
                 Console.WriteLine("\n      0     1     2     3     4     5" +
                     "     6     7");
         }
-     }
     
+        private static bool WolfEndGame()
+        {
+            //If Wold is on the left side
+            if (wolfPos[1] == 0)
+            {
+                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
+                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;
+            }
+            if (wolfPos[1] == 7)
+            {
+                return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
+                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
+            }
+            if  (wolfPos[0] == 0)
+            {
+                return board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
+                board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false;
+            }
+            if  (wolfPos[0] == 7)
+            {
+                return board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
+                board[wolfPos[1]-1,wolfPos[0]-1].isPlayable == false;
+            }
+            else
+            {
+                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
+                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false &&
+                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
+                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;        
+            }    
+        }
 
+        private static (int, int) sheepChosen(string auxTemp)
+        {
+            switch (auxTemp)
+            {
+                case "S1":
+                    sheepNewPos[0] = sheep1Pos[0];
+                    sheepNewPos[1] = sheep1Pos[1];
+                break;
+                case "S2":
+                    sheepNewPos[0] = sheep2Pos[0];
+                    sheepNewPos[1] = sheep2Pos[1];
+                break;
+                case "S3":
+                    sheepNewPos[0] = sheep3Pos[0];
+                    sheepNewPos[1] = sheep3Pos[1];
+                break;
+                case "S4":
+                    sheepNewPos[0] = sheep4Pos[0];
+                    sheepNewPos[1] = sheep4Pos[1];
+                    break;
+                default:
+                    sheepChosen(auxTemp);
+                    break;
+            }
+            return (sheepNewPos[0],sheepNewPos[1]);
+        } 
+    }
     class Square
     {
         // Diz se o square pode ser jogado ou não
