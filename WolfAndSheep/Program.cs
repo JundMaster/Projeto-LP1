@@ -6,6 +6,7 @@ namespace WolfAndSheep
     {
         static void Main(string[] args)
         {
+
             // Chama função de introdução
             intro();
 
@@ -421,52 +422,101 @@ namespace WolfAndSheep
                 // Imprime o tabuleiro
                 Console.WriteLine("---------------------------------");
                 Console.WriteLine("Numbers = Playable Squares");
-                Console.WriteLine("Black Spaces = Unplayable Squares");
+                Console.WriteLine("White Squares = Unplayable Squares");
                 Console.WriteLine("exit  <- to quit the game");
 
                 // Imprime números no topo do tabuleiro
                 Console.WriteLine("");
-                Console.WriteLine("     0 1 2 3 4 5 6 7");
+                Console.WriteLine("      0     1     2     3     4     5" +
+                    "     6     7");
+                Console.WriteLine("");
                 for (int i = 0; i < 8; i++)
                 {
-                    Console.WriteLine("");
-                    Console.Write($"{i}   ");
-                    for (int j = 0; j < 8; j++)
+                    // Variável para imprimir cada linha 3 vezes
+                    int boardTemp = 0; 
+                    
+                    while (boardTemp <3)
                     {
-                        
-                        // Imprime o WOLF em vez dos números e coloca esse mesmo
-                        if (board[i,j].animal == "Wolf")
-                            Console.Write("WW");
-
-                        // Imprime a SHEEP em vez dos números e coloca esse mesmo
-                        else if (board[i,j].animal == "Sheep_01")
-                            Console.Write("S1");
-
-                        else if (board[i,j].animal == "Sheep_02")
-                            Console.Write("S2");
-
-                        else if (board[i,j].animal == "Sheep_03")
-                            Console.Write("S3");
-                            
-                        else if (board[i,j].animal == "Sheep_04")
-                            Console.Write("S4");       
-
-                        // Se não der para jogar imprime PRETO
-                        else if (board[i,j].isPlayable == false)
-                            Console.Write($"  ");
-
-                        // Se der para jogar imprime a linha e a coluna
+                        // So na linha do meio de cada quadrado
+                        // Imprime os números à volta do tabuleiro
+                        if (boardTemp == 1)
+                            Console.Write($"{i}   ");
                         else
+                            Console.Write($"    ");
+
+                        for (int j = 0; j < 8; j++)
                         {
-                            Console.Write($"{board[i,j].row}");
-                            Console.Write($"{board[i,j].column}");     
+                            
+                                // Imprime o WOLF em vez dos números e coloca esse mesmo
+                                if (board[i,j].animal == "Wolf")
+                                    Console.Write(" WWWW ");
+
+                                // Imprime a SHEEP em vez dos números e coloca esse mesmo
+                                else if (board[i,j].animal == "Sheep_01")
+                                {
+                                    if (boardTemp == 1)
+                                        Console.Write("S1S1S1");
+                                    else
+                                    Console.Write("  S1  ");
+                                }
+
+                                else if (board[i,j].animal == "Sheep_02")
+                                {
+                                    if (boardTemp == 1)
+                                        Console.Write("S2S2S2");
+                                    else
+                                    Console.Write("  S2  ");
+                                }
+
+                                else if (board[i,j].animal == "Sheep_03")
+                                {
+                                    if (boardTemp == 1)
+                                        Console.Write("S3S3S3");
+                                    else
+                                    Console.Write("  S3  ");
+                                }
+
+                                else if (board[i,j].animal == "Sheep_04")
+                                {
+                                    if (boardTemp == 1)
+                                        Console.Write("S4S4S4");
+                                    else
+                                    Console.Write("  S4  ");
+                                }
+
+                                // Se não der para jogar imprime PRETO
+                                
+                                    
+                                // Se der para jogar imprime a linha e a coluna
+                                else if (board[i,j].isPlayable)
+                                {
+                                    if (boardTemp == 1)
+                                        Console.Write($"  {i}{j}  ");
+                                    else
+                                        Console.Write($"      ");
+                                }
+
+                                else if (board[i,j].isPlayable == false)
+                                {
+    
+                                    Console.Write($"||||||");
+                                }
+                            if (j==7)
+                            {
+                                // So na linha do meio de cada quadrado
+                                // Imprime os números no fim do tabuleiro
+                                if (boardTemp == 1)
+                                    Console.Write($"   {i}");
+
+                                boardTemp++;                            
+                                Console.WriteLine("");
+                            }
                         }
                     }
-                    // Imprime os números à direita do tabuleiro
-                    Console.Write($"   {i}");
                 }
                 // Imprime números em baixo do tabuleiro
-                Console.WriteLine("\n\n     0 1 2 3 4 5 6 7");
+                Console.WriteLine("\n      0     1     2     3     4     5" +
+                    "     6     7");
         }
      }
     
