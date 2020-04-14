@@ -37,6 +37,12 @@ namespace WolfAndSheep
             // Variáveis para a posição atual do WOLF
             int [] wolfPos = new int[2] {0, 0};
 
+            // Todos os quadrados playable à volta do lobo
+            int wolfNextRow = wolfPos[0] +1;
+            int wolfNextColumn = wolfPos[1] +1;
+            int wolfNextRowNeg = wolfPos[0] -1;
+            int wolfNextColumnNeg = wolfPos[1] -1;
+
             // Variáveis para o input do jogador para o movimento da Sheep
             int [] sheepTempPos = new int[2] {0, 0};
             int [] sheepNewPos = new int[2] {0, 0};
@@ -135,7 +141,7 @@ namespace WolfAndSheep
                     {
                         Console.WriteLine(" ");
                         Console.WriteLine("----------- WOLF TURN -----------");
-
+                        
                         // Pedir input ao jogador
                         Console.Write("Insert a row number: ");
                         aux1 = Console.ReadLine();
@@ -225,21 +231,20 @@ namespace WolfAndSheep
                                     }
                         
                         // Imprime que casas podem ser jogadas
-                        //Console.WriteLine($"Legal moves:   {wolfPos[0]+1}{wolfPos[1]+1} {wolfPos[0]+1}{wolfPos[1]-1} {wolfPos[0]-1}{wolfPos[1]+1} {wolfPos[0]-1}{wolfPos[1]-1}");
                         Console.WriteLine("");
-                        if (wolfPos[0] < 7)
-                            Console.WriteLine($"*Possible Vertical Move:"+
-                                    $" Row {wolfPos[0]-1}*");
                         if (wolfPos[0] > 0)
                             Console.WriteLine($"*Possible Vertical Move:"+
+                                    $" Row {wolfPos[0]-1}*");
+                        if (wolfPos[0] < 7)
+                            Console.WriteLine($"*Possible Vertical Move:"+
                                     $" Row {wolfPos[0]+1}*");
-                        if (wolfPos[1] < 7)
-                            Console.WriteLine($"*Possible Horizontal Move:"+
-                                    $" Column {wolfPos[1]-1}*");
                         if (wolfPos[1] > 0)
                             Console.WriteLine($"*Possible Horizontal Move:"+
+                                    $" Column {wolfPos[1]-1}*");
+                        if (wolfPos[1] < 7)
+                            Console.WriteLine($"*Possible Horizontal Move:"+
                                     $" Column {wolfPos[1]+1}*");
-
+  
                         // Se não for válido vai repetir o loop
                         Console.WriteLine("");
                         Console.WriteLine("Please choose a valid number");
