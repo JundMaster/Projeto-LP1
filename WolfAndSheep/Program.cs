@@ -447,11 +447,12 @@ namespace WolfAndSheep
                         for (int j = 0; j < 8; j++)
                         {
                             
-                                // Imprime o WOLF em vez dos números e coloca esse mesmo
+                                // Imprime o WOLF em vez dos números
                                 if (board[i,j].animal == "Wolf")
                                     Console.Write(" WWWW ");
 
-                                // Imprime a SHEEP em vez dos números e coloca esse mesmo
+                                // Imprime a SHEEP em vez dos números
+                                // Imprime SHEEP em sinal de Mais
                                 else if (board[i,j].animal == "Sheep_01")
                                 {
                                     if (boardTemp == 1)
@@ -483,9 +484,6 @@ namespace WolfAndSheep
                                     else
                                     Console.Write("  S4  ");
                                 }
-
-                                // Se não der para jogar imprime PRETO
-                                
                                     
                                 // Se der para jogar imprime a linha e a coluna
                                 else if (board[i,j].isPlayable)
@@ -496,11 +494,10 @@ namespace WolfAndSheep
                                         Console.Write($"      ");
                                 }
 
+                                // Se não der para jogar imprime a branco
                                 else if (board[i,j].isPlayable == false)
-                                {
-    
                                     Console.Write($"||||||");
-                                }
+
                             if (j==7)
                             {
                                 // So na linha do meio de cada quadrado
@@ -508,6 +505,7 @@ namespace WolfAndSheep
                                 if (boardTemp == 1)
                                     Console.Write($"   {i}");
 
+                                // Incrementa a variável para sair do while
                                 boardTemp++;                            
                                 Console.WriteLine("");
                             }
