@@ -178,7 +178,7 @@ namespace projetoLP1
                         // Deal with the general wolf positioning
                         if (round != 0)
                         {
-                            // If the insert coordinates are valid the loop breaks
+                            // If the insert wolfCoords are valid the loop breaks
 
                             if (lastWolfLine == wolfLine && lastWolfColumn == auxWolfColumn)
                                 InvalidMove("sameSquare");
@@ -238,22 +238,17 @@ namespace projetoLP1
                 }
             }
 
-            // InputDealer(0);
-            int [] test = new int [4];
-            int [] coordinates = new int [4];
-
-            Console.WriteLine("loop broken");
-            
+            int [] wolfCoords = new int [4];
 
             while (gameOver == false)
             {
                 if (round == 0)
                 {   
-                    InputDealer(round, 1, 1).CopyTo(coordinates, 0);
-                    wolfLine = coordinates[0];
-                    auxWolfColumn = coordinates[1];
-                    lastWolfLine = coordinates[2];
-                    lastWolfColumn = coordinates[3];
+                    InputDealer(round, 1, 1).CopyTo(wolfCoords, 0);
+                    wolfLine = wolfCoords[0];
+                    auxWolfColumn = wolfCoords[1];
+                    lastWolfLine = wolfCoords[2];
+                    lastWolfColumn = wolfCoords[3];
                     round++;
                 }
 
@@ -352,10 +347,13 @@ namespace projetoLP1
                 Console.WriteLine("round: {0}", round);
                 lastWolfLine = wolfLine;
                 lastWolfColumn = auxWolfColumn;
+
                 // Gets user input
-                InputDealer(round, lastWolfLine, lastWolfColumn).CopyTo(coordinates, 0);
-                wolfLine = coordinates[0];
-                auxWolfColumn = coordinates[1];
+                InputDealer(round, lastWolfLine, lastWolfColumn).CopyTo(wolfCoords, 0);
+                wolfLine = wolfCoords[0];
+                auxWolfColumn = wolfCoords[1];
+
+
                 // increments rounds
                 if (board[wolfLine - 1, auxWolfColumn - 1].isPlayable)
                     round++;
