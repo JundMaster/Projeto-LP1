@@ -14,7 +14,7 @@ Luiz Santos (a21901441)
 |Criação das ovelhas|_Gameloop_ geral|Criação do Lobo/Método _intro_ /Método _victory_|
 |_Gameloop_ das ovelhas|Movimentação com input|_Gameloop_ do wolf|
 |Limitação do movimento das ovelhas|Try-Catch|Limitação do movimento do lobo|
-||Método _printBoard,|
+|||Método _printBoard_|
 
 ---
 ### Repositório git
