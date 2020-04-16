@@ -772,6 +772,7 @@ namespace WolfAndSheep
             switch (aux3)
             {
                 case "S1":
+                    hasMoved = true;
                     sheep1Pos[0] = sheepNewPos[0];
                     sheep1Pos[1] = sheepNewPos[1];
                     break;
