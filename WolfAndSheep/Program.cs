@@ -49,19 +49,16 @@ namespace WolfAndSheep
         // Mensagem de erro
         const string errorMessage = "----------- Error Message -----------";
 
-        
-
-
         static void Main(string[] args)
         {
             // Chama função de introdução
-            intro();
+            Intro();
 
             //Chama a função que inicia o jogo em si
-            game();
+            Game();
         }
 
-        private static void game()
+        private static void Game()
         {
             //Variável que define o tamanho do tabuleiro de jogo
             board = new Square[8, 8]; 
@@ -107,14 +104,14 @@ namespace WolfAndSheep
                 // Apenas para a primeira jogada no jogo
                 if (numberOfPlays == 0)
                 {
-                    firstTurn();
+                    FirstTurn();
                 }
                     
                 // Jogadas para o WOLF
                 // Quando o numero de jogadas é ímpar
                 else if (numberOfPlays % 2 != 0)
                 {
-                    wolfTurn();
+                    WolfTurn();
                 }
                 
                 // Jogadas para A SHEEP
@@ -128,12 +125,12 @@ namespace WolfAndSheep
                     Console.WriteLine("Choose a Sheep to play:\n");
                     Console.WriteLine("-- S1     S2     S3    S4 --");
                     aux3 = Console.ReadLine().ToUpper();
-                    sheepChosen(aux3);
+                    SheepChosen(aux3);
                     if (auxTemp == "invalid")
                         continue;
                     Console.Write($"You chose {aux3}\n");
                     
-                    sheepTurn();
+                    SheepTurn();
                 }
                                             
                 // Posições dos animais
@@ -145,7 +142,7 @@ namespace WolfAndSheep
                 
                 // Imprime o tabuleiro após cada jogada
                 if (gameOver == false)
-                    printBoard(board);
+                    PrintBoard(board);
 
                 // Chama função de Victory
                 // Vai detetar se o Wolf está num dos últimos Squares
@@ -153,7 +150,7 @@ namespace WolfAndSheep
                 {
                     if (board[7,x].animal == "Wolf")
                     {
-                        victory("Wolf", numberOfPlays);
+                        Victory("Wolf", numberOfPlays);
                         gameOver = true;
                     }
                 }
@@ -166,7 +163,7 @@ namespace WolfAndSheep
 /*-------------------------------- Métodos -----------------------------------*/
 
         // Função que imprime o texto inicial 
-        private static void intro()
+        private static void Intro()
         {
             Console.WriteLine("");
             Console.WriteLine("");
@@ -189,7 +186,7 @@ namespace WolfAndSheep
         }
 
         // Função que imprime a mensagem de Vitoria
-        private static void victory(string animal, int plays)
+        private static void Victory(string animal, int plays)
         {
             Console.WriteLine(" ");
             Console.WriteLine(" ");
@@ -198,8 +195,9 @@ namespace WolfAndSheep
         }
         
         // Só aceita números com +1 ou -1 que a casa atual 
-        private static bool legalMove(string animal)
+        private static bool LegalMove(string animal)
         {
+            bool canMove;
             if (animal == "wolf")
                 // Verifica que tá a 1 quadrado de distância da posição atual
                 if (wolfNewPos[0] >= 0 && wolfNewPos[0] < 8 && 
@@ -210,9 +208,9 @@ namespace WolfAndSheep
                     wolfNewPos[1] < wolfPos[1] + 2 &&
                     wolfNewPos[0] > wolfPos[0] - 2 && 
                     wolfNewPos[1] > wolfPos[1] - 2)
-                    return true;
+                    canMove = true;
                 else
-                    return false;
+                    canMove = false;
             else
                 // Verifica que tá a 1 quadrado de distância da posição atual
                 // e que a row é MENOR (para andar para cima)
@@ -224,13 +222,14 @@ namespace WolfAndSheep
                     sheepTempPos[1] < sheepNewPos[1] + 2 &&
                     sheepTempPos[0] > sheepNewPos[0] - 2 && 
                     sheepTempPos[1] > sheepNewPos[1] - 2)
-                    return true;
+                    canMove = true;
                 else
-                    return false;
+                    canMove = false;
+            return canMove;
         }
 
         // Função que imprime no ecrã as jogadas possíveis do WOLF
-        private static void wolfFreePlays()
+        private static void WolfFreePlays()
         {
             Console.WriteLine("");
             if (wolfPos[0] > 0)
@@ -248,7 +247,7 @@ namespace WolfAndSheep
         }
 
         // Função que imprime o tabuleiro para o ecrã
-        private static void printBoard(Square[,] board)
+        private static void PrintBoard(Square[,] board)
         {
                 // Imprime o tabuleiro
                 Console.WriteLine("---------------------------------");
@@ -352,7 +351,7 @@ namespace WolfAndSheep
         }
     
         // Verifica se o Wolf tem mais jogadas possíveis
-        private static bool wolfGameOver()
+        private static bool WolfGameOver()
         {
             // Se o Wolf estiver no quadrado da esquerda
             if (wolfPos[1] == 0)
@@ -390,7 +389,7 @@ namespace WolfAndSheep
 
         // Verifica qual SHEEP o jogador escolheu
         // É chamada novamente caso o jogador nao escolha uma das 4 opções
-        private static bool sheepGameOver(string aux3)
+        private static bool SheepGameOver(string aux3)
         {
             if (hasMoved == false)
             {
@@ -502,7 +501,7 @@ namespace WolfAndSheep
             }
 
         }
-        private static (int, int, string) sheepChosen(string aux3)
+        private static (int, int, string) SheepChosen(string aux3)
         {
             switch (aux3)
             {
@@ -510,7 +509,7 @@ namespace WolfAndSheep
                     sheepNewPos[0] = sheep1Pos[0];
                     sheepNewPos[1] = sheep1Pos[1];
                     auxTemp = "S1";
-                    if(sheepGameOver(aux3))
+                    if(SheepGameOver(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
@@ -523,7 +522,7 @@ namespace WolfAndSheep
                     sheepNewPos[0] = sheep2Pos[0];
                     sheepNewPos[1] = sheep2Pos[1];
                     auxTemp = "S2";
-                    if(sheepGameOver(aux3))
+                    if(SheepGameOver(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
@@ -534,7 +533,7 @@ namespace WolfAndSheep
                     sheepNewPos[0] = sheep3Pos[0];
                     sheepNewPos[1] = sheep3Pos[1];
                     auxTemp = "S3";
-                    if(sheepGameOver(aux3))
+                    if(SheepGameOver(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
@@ -545,7 +544,7 @@ namespace WolfAndSheep
                     sheepNewPos[0] = sheep4Pos[0];
                     sheepNewPos[1] = sheep4Pos[1];
                     auxTemp = "S4";
-                    if(sheepGameOver(aux3))
+                    if(SheepGameOver(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
@@ -559,7 +558,7 @@ namespace WolfAndSheep
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         }
-        private static bool checkConvert(int aux1, string aux2, int numberOfPlays)
+        private static bool CheckConvert(int aux1, string aux2, int numberOfPlays)
         {
 
             // Mensagem de erro
@@ -602,7 +601,7 @@ namespace WolfAndSheep
         }
     
         // É corrida no primeiro turno
-        private static void firstTurn()
+        private static void FirstTurn()
         {
             // Faz o loop do input do jogador ate colocar um 
             // Square válido
@@ -622,7 +621,7 @@ namespace WolfAndSheep
                 }
 
                 //Converte a string do input para int
-                if (checkConvert(wolfPos[1], aux2, numberOfPlays))
+                if (CheckConvert(wolfPos[1], aux2, numberOfPlays))
                     wolfPos[1] = Convert.ToInt16(aux2);
                 else
                     continue;
@@ -641,7 +640,7 @@ namespace WolfAndSheep
         }
     
         // É corrida no turno do wolf
-        private static void wolfTurn()
+        private static void WolfTurn()
         {
             do 
             {
@@ -651,18 +650,18 @@ namespace WolfAndSheep
                 
                 // Verifica se o Wolf tem jogadas possíveis
                 // Caso não tenha, o jogo acaba
-                if (wolfGameOver())
+                if (WolfGameOver())
                 {
                     // Imprime a mensage de Vitoria
                     // E o Numero de Jogadas feitas 
-                    victory("Sheep", numberOfPlays);
+                    Victory("Sheep", numberOfPlays);
                     
                     gameOver = true;
                     break;
                 }
                 // Pedir input ao jogador
                 // Imprime que casas podem ser jogadas
-                wolfFreePlays();
+                WolfFreePlays();
 
                 Console.Write("\nInsert a row number: ");
                 aux1 = Console.ReadLine();
@@ -676,19 +675,19 @@ namespace WolfAndSheep
                     gameOver = true;
                     break;
                 }
-                if (checkConvert(wolfNewPos[0], aux1, numberOfPlays))
+                if (CheckConvert(wolfNewPos[0], aux1, numberOfPlays))
                     wolfNewPos[0] = Convert.ToInt16(aux1);
                 else
                     continue;
 
-                if (checkConvert(wolfNewPos[1], aux2, numberOfPlays))
+                if (CheckConvert(wolfNewPos[1], aux2, numberOfPlays))
                     wolfNewPos[1] = Convert.ToInt16(aux2);
                 else
                     continue;
                 
                 // Se meter o número valido, movimenta o lobo
                 // Só aceita números com +1 ou -1 que a casa atual
-                if (legalMove("wolf"))
+                if (LegalMove("wolf"))
                 {
                     // Verifica se a posição do input é Playable
                     if (board[wolfNewPos[0], wolfNewPos[1]].isPlayable)
@@ -713,7 +712,7 @@ namespace WolfAndSheep
         }
     
         // É corrida no turno da sheep
-        private static void sheepTurn()
+        private static void SheepTurn()
         {
             do
             {
@@ -732,12 +731,12 @@ namespace WolfAndSheep
                 
                 // Tentar converter o input para int
                 // Se não conseguir imprime mensagens de erro
-                if (checkConvert(sheepTempPos[0], aux1, numberOfPlays))
+                if (CheckConvert(sheepTempPos[0], aux1, numberOfPlays))
                     sheepTempPos[0] = Convert.ToInt16(aux1);
                 else
                     continue;
 
-                if (checkConvert(sheepTempPos[1], aux2, numberOfPlays))
+                if (CheckConvert(sheepTempPos[1], aux2, numberOfPlays))
                     sheepTempPos[1] = Convert.ToInt16(aux2);
                 else
                     continue;
@@ -745,7 +744,7 @@ namespace WolfAndSheep
                 
                 // Se meter o número valido, movimenta o lobo
                 // Só aceita números com +1 ou -1 que a casa atual 
-                if (legalMove("sheep"))     
+                if (LegalMove("sheep"))     
                 {
                     // Verifica se a posição do input é Playable
                     if (board[sheepTempPos[0], sheepTempPos[1]].
