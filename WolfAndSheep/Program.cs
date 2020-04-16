@@ -841,18 +841,18 @@ namespace WolfAndSheep
                         auxTemp = "invalid";
                         break;
                     }
-                break;
+                    break;
                 case "S4":
                     sheepNewPos[0] = sheep4Pos[0];
                     sheepNewPos[1] = sheep4Pos[1];
                     auxTemp = "S4";
-                    break;
                     if(SheepEndGame(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
                         break;
                     }
+                    break;
                 default:
                     Console.WriteLine("Not a Valid Choice, try again.");
                     auxTemp = "invalid";
