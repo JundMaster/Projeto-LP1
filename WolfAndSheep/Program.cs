@@ -54,13 +54,16 @@ namespace WolfAndSheep
 
         static void Main(string[] args)
         {
-            // Chama função de introdução
+            
             intro();
 
-            //Chama a função que inicia o jogo em si
+            
             game();
         }
 
+        /// <summary>
+        /// Função que controla o ciclo no qual consiste o jogo
+        /// </summary>
         private static void game()
         {
             //Variável que define o tamanho do tabuleiro de jogo
@@ -165,7 +168,10 @@ namespace WolfAndSheep
 
 /*-------------------------------- Métodos -----------------------------------*/
 
-        // Função que imprime o texto inicial 
+        /// <summary>
+        /// Função que imprime as regras ddo jogo e as possíveis casas iniciais 
+        /// do Lobo
+        /// </summary>
         private static void intro()
         {
             Console.WriteLine("");
@@ -188,7 +194,12 @@ namespace WolfAndSheep
             Console.WriteLine("-- 1     3     5    7 --");
         }
 
-        // Função que imprime a mensagem de Vitoria
+        /// <summary>
+        /// Função que imprime a mensagem de vitória com o animal vencedor e o
+        /// número de jogadas feitas.
+        /// </summary>
+        /// <param name="animal">Variável que guarda o tipo de animal vencedor</param>
+        /// <param name="plays"> Variável que guarda o número de jogadas feitas</param>
         private static void victory(string animal, int plays)
         {
             Console.WriteLine(" ");
@@ -197,7 +208,14 @@ namespace WolfAndSheep
             Console.WriteLine($"Number of total plays = {plays}");
         }
         
-        // Só aceita números com +1 ou -1 que a casa atual 
+        /// <summary>
+        /// Função que verifica se o Input do jogar é legal tendo em conta as
+        /// regras do jogo
+        /// </summary>
+        /// <param name="animal"> Variável que guarda o tipo de animal está a jogar
+        /// no turno atual</param>
+        /// <returns>Retorna "True" se a jogada for válida ou "Falso" se for
+        /// inválida</returns>
         private static bool legalMove(string animal)
         {
             if (animal == "wolf")
@@ -229,7 +247,9 @@ namespace WolfAndSheep
                     return false;
         }
 
-        // Função que imprime no ecrã as jogadas possíveis do WOLF
+        /// <summary>
+        /// Função que indica as jogadas possíveis para o Lobo
+        /// </summary>
         private static void wolfFreePlays()
         {
             Console.WriteLine("");
@@ -247,7 +267,11 @@ namespace WolfAndSheep
                         $" Column {wolfPos[1]+1}*");
         }
 
-        // Função que imprime o tabuleiro para o ecrã
+        /// <summary>
+        /// Funçao que imprime todo o tabuleiro
+        /// </summary>
+        /// <param name="board">Variável que guarda os valores para as posições
+        /// de cada casa do tabuleiro</param>
         private static void printBoard(Square[,] board)
         {
                 // Imprime o tabuleiro
@@ -351,7 +375,12 @@ namespace WolfAndSheep
                     "     6     7");
         }
     
-        // Verifica se o Wolf tem mais jogadas possíveis
+        /// <summary>
+        /// Funcção que verifica se o Lobo tem jogadas possíveis quando esta nas
+        /// bordas do tabuleiro ou no meio
+        /// </summary>
+        /// <returns> Retorna "True" se o Lobo não tiver jogadas
+        /// possíveis e "Falso" se ainda existirem jogadas. </returns>
         private static bool wolfGameOver()
         {
             // Se o Wolf estiver no quadrado da esquerda
@@ -381,15 +410,22 @@ namespace WolfAndSheep
             // Se o Wolf estiver no quadrado da esquerda
             else
             {
+            
                 return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
                 board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false &&
                 board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
                 board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;        
             }    
         }
-
-        // Verifica qual SHEEP o jogador escolheu
-        // É chamada novamente caso o jogador nao escolha uma das 4 opções
+        
+        /// <summary>
+        /// Função que verifica se a Ovelha escolhida tem jogadas possíveis ou caso
+        /// todas as ovelhas estejam bloqueadas fecha o jogo dando a vitória ao
+        /// Lobo
+        /// </summary>
+        /// <param name="aux3"> Variável que guarda o nome da Ovelha escolhida</param>
+        /// <returns> Retorna "True" se a Ovelha escolhida não tiver jogadas
+        /// possíveis e "Falso" se ainda existirem jogadas. </returns>
         private static bool sheepGameOver(string aux3)
         {
             if (hasMoved == false)
@@ -502,6 +538,12 @@ namespace WolfAndSheep
             }
 
         }
+        
+        /// <summary>
+        /// Função que controla o Input do jogador para a seleção da ovelha a jogar
+        /// </summary>
+        /// <returns>Retorna os valores para a posição da Ovelha escolhida
+        /// e o seu nome</returns>
         private static (int, int, string) sheepChosen(string aux3)
         {
             switch (aux3)
@@ -559,6 +601,16 @@ namespace WolfAndSheep
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         }
+        
+        /// <summary>
+        /// Função que verifica se o Input do jogador é válido
+        /// </summary>
+        /// <param name="aux1"> Variável que guarda o Input do Jogador após 
+        /// conversão para inteiro</param>
+        /// <param name="aux2"> Variável que guarda O Input do jogador em 
+        /// formato string para conversão</param>
+        /// <returns>Retorna "True" caso o Input seja válido ou "Falso" caso 
+        /// seja inválido</returns>
         private static bool checkConvert(int aux1, string aux2, int numberOfPlays)
         {
 
@@ -576,10 +628,7 @@ namespace WolfAndSheep
             {
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                if (numberOfPlays > 0)
-                    Console.WriteLine("Please insert a valid number.\n");
-                else
-                    Console.WriteLine("Please insert a valid initial position.\n");
+                Console.WriteLine("Please insert a valid initial position.\n");
                 canConvert = false;
                 Console.WriteLine(errorBar);
             }
@@ -587,11 +636,7 @@ namespace WolfAndSheep
             {
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                if (numberOfPlays > 0)
-                    Console.WriteLine("The input must be a valid line" +
-                " number or the 'exit' command.\n");
-                else
-                    Console.WriteLine("Please insert a number, not a string.\n");
+                Console.WriteLine("Please insert a number, not a string.\n");
                 
                 canConvert = false;
                 Console.WriteLine(errorBar);
@@ -600,20 +645,17 @@ namespace WolfAndSheep
             {
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                if (numberOfPlays == 0)
-                    Console.WriteLine("The Wolf can only start on the first line.\n");
-
-                
+                Console.WriteLine("The Wolf can only start on the first line.\n");
                 canConvert = false;
                 Console.WriteLine(errorBar);
             }
-
-
+            
             return canConvert;
-
         }
     
-        // É corrida no primeiro turno
+        /// <summary>
+        /// Função que controla o Input para a casa Inicial do Lobo
+        /// </summary>
         private static void firstTurn()
         {
             // Faz o loop do input do jogador ate colocar um 
@@ -664,7 +706,9 @@ namespace WolfAndSheep
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
-        // É corrida no turno do wolf
+        /// <summary>
+        /// Função que controla todo o Input do Turno do Lobo
+        /// </summary>
         private static void wolfTurn()
         {
             do 
@@ -737,7 +781,9 @@ namespace WolfAndSheep
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
-        // É corrida no turno da sheep
+        /// <summary>
+        /// Função que controla todo o Input do Turno das Ovelhas
+        /// </summary>
         private static void sheepTurn()
         {
             do
