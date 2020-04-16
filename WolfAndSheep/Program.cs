@@ -228,24 +228,6 @@ namespace WolfAndSheep
             return canMove;
         }
 
-        // Função que imprime no ecrã as jogadas possíveis do WOLF
-        private static void WolfFreePlays()
-        {
-            Console.WriteLine("");
-            if (wolfPos[0] > 0)
-                Console.WriteLine($"*Possible Vertical Move:"+
-                        $" Row {wolfPos[0]-1}*");
-            if (wolfPos[0] < 7)
-                Console.WriteLine($"*Possible Vertical Move:"+
-                        $" Row {wolfPos[0]+1}*");
-            if (wolfPos[1] > 0)
-                Console.WriteLine($"*Possible Horizontal Move:"+
-                        $" Column {wolfPos[1]-1}*");
-            if (wolfPos[1] < 7)
-                Console.WriteLine($"*Possible Horizontal Move:"+
-                        $" Column {wolfPos[1]+1}*");
-        }
-
         // Função que imprime o tabuleiro para o ecrã
         private static void PrintBoard(Square[,] board)
         {
@@ -683,9 +665,6 @@ namespace WolfAndSheep
                     gameOver = true;
                     break;
                 }
-                // Pedir input ao jogador
-                // Imprime que casas podem ser jogadas
-                WolfFreePlays();
 
                 Console.Write("\nInsert a row number: ");
                 aux1 = Console.ReadLine();
