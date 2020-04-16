@@ -63,35 +63,35 @@ namespace WolfAndSheep
             //Variável que define o tamanho do tabuleiro de jogo
             board = new Square[8, 8]; 
 
+            // cria o board com a classe Square
+            // Criação de cada Square
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    // Cria uma instância da classe Square para cada ponto  
+                    // no tabuleiro
+                    board[i,j] = new Square(i, j);
+
+                    // Dá valores à row e column de cada instância do Square
+                    board[i,j].row = i;
+                    board[i,j].column = j;
+
+                    // Se o Square for BRANCO não é playable
+                    // Todos os pares (é branco)
+                    if (i % 2 == 0 && j % 2 == 0)
+                        board[i,j].isPlayable = false;
+                    // Todos os ímpares (é branco)
+                    else if (i % 2 != 0 && j % 2 != 0)
+                        board[i,j].isPlayable = false;
+                    // Resto dos quadrados (é preto e playable)
+                    else
+                        board[i,j].isPlayable = true;
+                }
+            }
+
             while (gameOver == false)
             {
-                // cria o board com a classe Square
-                // Criação de cada Square
-                for (int i = 0; i < 8; i++)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        // Cria uma instância da classe Square para cada ponto  
-                        // no tabuleiro
-                        board[i,j] = new Square(i, j);
-
-                        // Dá valores à row e column de cada instância do Square
-                        board[i,j].row = i;
-                        board[i,j].column = j;
-
-                        // Se o Square for BRANCO não é playable
-                        // Todos os pares (é branco)
-                        if (i % 2 == 0 && j % 2 == 0)
-                            board[i,j].isPlayable = false;
-                        // Todos os ímpares (é branco)
-                        else if (i % 2 != 0 && j % 2 != 0)
-                            board[i,j].isPlayable = false;
-                        // Resto dos quadrados (é preto e playable)
-                        else
-                            board[i,j].isPlayable = true;
-                    }
-                }
-
                 //Define que as casas das Sheep e do Wolf nao sao jogáveis
                 board[sheep1Pos[0], sheep1Pos[1]].isPlayable = false;
                 board[sheep2Pos[0], sheep2Pos[1]].isPlayable = false;
@@ -280,7 +280,7 @@ namespace WolfAndSheep
                                 // no meio do quadrado
                                 if (board[i,j].animal == "Wolf")
                                     if (boardTemp == 1)
-                                        Console.Write("  WW  ");
+                                        Console.Write(" (WW) ");
                                     else
                                         Console.Write("      ");
 
@@ -289,7 +289,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_01")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("  S1  ");
+                                        Console.Write(" <S1> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -297,7 +297,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_02")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("  S2  ");
+                                        Console.Write(" {S2} ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -305,7 +305,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_03")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("  S3  ");
+                                        Console.Write(" >S3< ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -313,7 +313,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_04")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write("  S4  ");
+                                        Console.Write(" [S4] ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -330,7 +330,7 @@ namespace WolfAndSheep
 
                                 // Se não der para jogar imprime a branco
                                 else if (board[i,j].isPlayable == false)
-                                    Console.Write($"||||||");
+                                    Console.Write("######");
 
                             if (j==7)
                             {
@@ -595,6 +595,18 @@ namespace WolfAndSheep
                 canConvert = false;
                 Console.WriteLine(errorBar);
             }
+            catch (IndexOutOfRangeException)
+            {
+                Console.WriteLine(errorMessage);
+                Console.WriteLine("");
+                if (numberOfPlays == 0)
+                    Console.WriteLine("The Wolf can only start on the first line.\n");
+
+                
+                canConvert = false;
+                Console.WriteLine(errorBar);
+            }
+
 
             return canConvert;
 
@@ -622,7 +634,19 @@ namespace WolfAndSheep
 
                 //Converte a string do input para int
                 if (CheckConvert(wolfPos[1], aux2, numberOfPlays))
-                    wolfPos[1] = Convert.ToInt16(aux2);
+                   { 
+                        wolfPos[1] = Convert.ToInt16(aux2);
+                        if(wolfPos[1] >= 8 || wolfPos[1] <= 0)
+                        {
+                            Console.WriteLine("----------- INVALID INPUT"+ "-----------\n");
+                            Console.WriteLine($"The wolf can only start on the first line.");
+                            Console.WriteLine("----------------------------"+
+                            "---------\n");
+                            wolfPos[1] = 0;
+                            continue;
+                        }
+                            
+                    }
                 else
                     continue;
                 
@@ -695,6 +719,7 @@ namespace WolfAndSheep
                         // Define posição em que o WOLF 
                         // estava como playable = TRUE
                         board[wolfPos[0], wolfPos[1]].isPlayable = true;
+                        board[wolfPos[0], wolfPos[1]].animal = "none";
 
                         // Define nova posição do lobo e
                         // define como playable = False
@@ -717,9 +742,9 @@ namespace WolfAndSheep
             do
             {
                 // Pedir input ao jogador
-                Console.Write("Insert a vertical num: ");
+                Console.Write("Insert a row number: ");
                 aux1 = Console.ReadLine();
-                Console.Write("Insert a horizontal num: ");
+                Console.Write("Insert a column num: ");
                 aux2 = Console.ReadLine();
 
                 // Se escrever exit, sai do jogo
@@ -752,8 +777,8 @@ namespace WolfAndSheep
                     {
                         // Define posição em que a Sheep
                         // estava como playable = TRUE
-                        board[sheepNewPos[0], sheepNewPos[1]].
-                                isPlayable = true;
+                        board[sheepNewPos[0], sheepNewPos[1]].isPlayable = true;
+                        board[sheepNewPos[0], sheepNewPos[1]].animal = "none";
                         // Define nova posição da sheep e
                         // define como playable = False
                         sheepNewPos[1] = sheepTempPos[1];
