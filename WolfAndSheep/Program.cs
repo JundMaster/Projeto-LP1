@@ -19,6 +19,7 @@ namespace WolfAndSheep
             static int [] sheep2Pos = new int[2] {7, 2};
             static int [] sheep3Pos = new int[2] {7, 4};
             private static int [] sheep4Pos = new int[2] {7, 6};
+            public static string auxTemp = "";
 
             // Variáveis para o input do jogador para o movimento da Sheep
             static int [] sheepTempPos = new int[2] {0, 0};
@@ -48,6 +49,7 @@ namespace WolfAndSheep
 
             // Varíaveis temporárias para o input do jogador
             string aux1, aux2, aux3;
+            
 
             // Todos os quadrados playable à volta do lobo
             int wolfNextRow = wolfPos[0] +1;
@@ -262,6 +264,9 @@ namespace WolfAndSheep
                     Console.WriteLine("-- S1     S2     S3    S4 --");
                     aux3 = Console.ReadLine().ToUpper();
                     sheepChosen(aux3);
+                    if (auxTemp == "invalid")
+                        continue;
+
                     Console.Write($"You chose {aux3}\n");
                     do
                     {
@@ -687,37 +692,39 @@ namespace WolfAndSheep
 
         /*Funçao que verifica qual SHEEP o jogador escolheu e que é chamada 
         novamente caso o jogador nao escolha uma das 4 opçoes*/
+
         private static (int, int, string) sheepChosen(string aux3)
         {
             switch (aux3)
             {
                 case "S1":
-                    aux3 = "S1";
                     sheepNewPos[0] = sheep1Pos[0];
                     sheepNewPos[1] = sheep1Pos[1];
+                    auxTemp = "S1";
                 break;
                 case "S2":
-                    aux3 = "S2";
                     sheepNewPos[0] = sheep2Pos[0];
                     sheepNewPos[1] = sheep2Pos[1];
+                    auxTemp = "S2";
                 break;
                 case "S3":
-                    aux3 = "S3";
                     sheepNewPos[0] = sheep3Pos[0];
                     sheepNewPos[1] = sheep3Pos[1];
+                    auxTemp = "S3";
                 break;
                 case "S4":
-                    aux3 = "S4";
                     sheepNewPos[0] = sheep4Pos[0];
                     sheepNewPos[1] = sheep4Pos[1];
+                    auxTemp = "S4";
                     break;
                 default:
                     Console.WriteLine("Not a Valid Choice, try again.");
-                    aux3 = Console.ReadLine().ToUpper();
-                    sheepChosen(aux3);
+                    auxTemp = "invalid";
+                    // auxTemp = Console.ReadLine().ToUpper();
+                    // sheepChosen(auxTemp);
                     break;
             }
-            return (sheepNewPos[0],sheepNewPos[1], aux3);
+            return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         } 
     }
 
