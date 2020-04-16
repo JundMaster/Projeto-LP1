@@ -32,6 +32,9 @@ namespace WolfAndSheep
             
             // Variável para o número de jogadas
             static int numberOfPlays = 0;
+
+            //Variavel que verifica se a ovelha já se moveu
+            static bool hasMoved = false;
         static void Main(string[] args)
         {
 
@@ -295,16 +298,20 @@ namespace WolfAndSheep
                         case "S1":
                             sheep1Pos[0] = sheepNewPos[0];
                             sheep1Pos[1] = sheepNewPos[1];
+                            hasMoved = true;
                         break;
                         case "S2":
+                            hasMoved = true;
                             sheep2Pos[0] = sheepNewPos[0];
                             sheep2Pos[1] = sheepNewPos[1];
                         break;
                         case "S3":
+                            hasMoved = true;
                             sheep3Pos[0] = sheepNewPos[0];
                             sheep3Pos[1] = sheepNewPos[1];
                         break;
                         case "S4":
+                            hasMoved = true;
                             sheep4Pos[0] = sheepNewPos[0];
                             sheep4Pos[1] = sheepNewPos[1];
                         break;
@@ -382,8 +389,8 @@ namespace WolfAndSheep
         do tabuleiro*/
         private static bool isWolfInputInBoard()
         {   
-            return wolfTempPos[0] >= 0 && wolfTempPos[0] <= 8 && 
-                wolfTempPos[1] >= 0 && wolfTempPos[1] <= 8;
+            return wolfTempPos[0] >= 0 && wolfTempPos[0] < 8 && 
+                wolfTempPos[1] >= 0 && wolfTempPos[1] < 8;
         }
         
         // Funçao que verifica se o Input do Jogador é diferente da casa atual
@@ -464,8 +471,8 @@ namespace WolfAndSheep
         do tabuleiro*/
         private static bool isSheepInputInBoard()
         {
-            return sheepTempPos[0] >= 0 && sheepTempPos[0] <= 8 && 
-            sheepTempPos[1] >= 0 && sheepTempPos[1] <= 8;
+            return sheepTempPos[0] >= 0 && sheepTempPos[0] < 8 && 
+            sheepTempPos[1] >= 0 && sheepTempPos[1] < 8;
         }
 
         // Funçao que verifica se o Input do Jogador é diferente da casa atual
@@ -643,7 +650,7 @@ namespace WolfAndSheep
             if (wolfPos[1] == 7)
             {
                 return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
+                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false;
             }
             //If Wold is on the top side
             if  (wolfPos[0] == 0)
@@ -671,24 +678,25 @@ namespace WolfAndSheep
         novamente caso o jogador nao escolha uma das 4 opçoes*/
         private static bool SheepEndGame(string aux3)
         {
-            if (numberOfPlays == 2)
+            if (hasMoved == false)
             {
                 if (aux3 == "S1")
                 {
                     sheepNewPos[0] = sheep1Pos[0];
                     sheepNewPos[1] = sheep1Pos[1];
                     
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
+                    if (sheepNewPos[1] == 0)
                     {
-                        return true;
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]+1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                        
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     else
                     {
+                        
                         return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
@@ -705,7 +713,7 @@ namespace WolfAndSheep
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]+1,sheepNewPos[1]-1].isPlayable == false && 
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
@@ -726,7 +734,7 @@ namespace WolfAndSheep
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]+1,sheepNewPos[1]-1].isPlayable == false && 
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
@@ -747,7 +755,7 @@ namespace WolfAndSheep
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]+1,sheepNewPos[1]-1].isPlayable == false && 
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
@@ -769,8 +777,8 @@ namespace WolfAndSheep
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]+1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     else
                     {
