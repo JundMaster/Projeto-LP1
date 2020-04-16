@@ -1,4 +1,9 @@
-﻿using System;
+﻿using System.Globalization;
+using System.IO;
+using System.Dynamic;
+using System.Collections;
+using System.Linq;
+using System;
 
 namespace WolfAndSheep
 {
@@ -59,10 +64,6 @@ namespace WolfAndSheep
 
             // Posições de vitória para o WOLF
             int[] wolfVictoryPositions = new int[4] {0, 2, 4, 6};
-
-            // Mensagem de erro
-            const string errorMessage = "----------- Error Message -----------";
-            
             
             while (gameOver == false)
             {
@@ -122,7 +123,11 @@ namespace WolfAndSheep
                         }
 
                         //Converte a string do input para int
-                        wolfPos[1] = Convert.ToInt16(aux2);
+                        if (CheckConvert(wolfPos[1], aux2, numberOfPlays))
+                            wolfPos[1] = Convert.ToInt16(aux2);
+                        else
+                            continue;
+                        
 
                         // Se meter o número valido, sai do loop
                         if (board[wolfPos[0], wolfPos[1]].isPlayable)
@@ -177,51 +182,16 @@ namespace WolfAndSheep
                             gameOver = true;
                             break;
                         }
-                        
-                        try
-                        {
+                        if (CheckConvert(wolfTempPos[0], aux1, numberOfPlays))
                             wolfTempPos[0] = Convert.ToInt16(aux1);
-                        }
-                        // Aparece uma mensagem para inserir um número válido
-                        // caso o jogador insira um número muito grande
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
 
-                        try
-                        {
+
+                        if (CheckConvert(wolfTempPos[1], aux2, numberOfPlays))
                             wolfTempPos[1] = Convert.ToInt16(aux2);
-                        }
-                        // Aparece uma mensagem para inserir um número válido
-                        // caso o jogador insira um número muito grande
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
                         
                         // Se meter o número valido, sai do loop
                         // Só aceita números com +1 ou -1 que a casa atual
@@ -284,11 +254,18 @@ namespace WolfAndSheep
                             break;
                         }
                         
-                        //Converte a string do input para int
-                        sheepTempPos[0] = Convert.ToInt16(aux1);
-                        sheepTempPos[1] = Convert.ToInt16(aux2);
+                        // Tentar converter o input para int
+                        // Se não conseguir imprime mensagens de erro
+                        if (CheckConvert(sheepTempPos[0], aux1, numberOfPlays))
+                            sheepTempPos[0] = Convert.ToInt16(aux1);
+                        else
+                            continue;
 
-
+                        if (CheckConvert(sheepTempPos[1], aux2, numberOfPlays))
+                            sheepTempPos[1] = Convert.ToInt16(aux2);
+                        else
+                            continue;
+                        
                         if (sheepInput())       
                         {
 
@@ -859,7 +836,48 @@ namespace WolfAndSheep
                     break;
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
-        } 
+        }
+        private static bool CheckConvert(int aux1, string aux2, int numberOfPlays)
+        {
+
+            // Mensagem de erro
+            const string errorMessage = "----------- INVALID INPUT -----------";
+            string errorBar = string.Concat(Enumerable.Repeat("-", 37));
+
+            bool canConvert; 
+            try
+            {
+                aux1 = Convert.ToInt16(aux2);
+                canConvert = true;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine(errorMessage);
+                Console.WriteLine("");
+                if (numberOfPlays > 0)
+                    Console.WriteLine("Please insert a valid number.\n");
+                else
+                    Console.WriteLine("Please insert a valid initial position.\n");
+                canConvert = false;
+                Console.WriteLine(errorBar);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine(errorMessage);
+                Console.WriteLine("");
+                if (numberOfPlays > 0)
+                    Console.WriteLine("The input must be a valid line" +
+                " number or the 'exit' command.\n");
+                else
+                    Console.WriteLine("Please insert a number, not a string.\n");
+                
+                canConvert = false;
+                Console.WriteLine(errorBar);
+            }
+
+            return canConvert;
+
+        }
     }
 
 /*----------------------------------CLASSES-----------------------------------*/
