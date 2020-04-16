@@ -260,18 +260,18 @@ namespace WolfAndSheep
                     Console.WriteLine("----------- FLOCK TURN -----------");
                     Console.WriteLine("Choose a Sheep to play:\n");
                     Console.WriteLine("-- S1     S2     S3    S4 --");
-                    
+                    aux3 = Console.ReadLine().ToUpper();
+                    sheepChosen(aux3);
+                    Console.Write($"You chose {aux3}\n");
                     do
                     {
-                        aux3 = Console.ReadLine().ToUpper();
-                        Console.Write($"You chose {aux3}\n");
-                        sheepChosen(aux3);
-
+                        
                         // Pedir input ao jogador
                         Console.Write("Insert a vertical num: ");
                         aux1 = Console.ReadLine();
                         Console.Write("Insert a horizontal num: ");
                         aux2 = Console.ReadLine();
+
                         // Se escrever exit, sai do jogo
                         if (aux1 == "exit" || aux2 == "exit")
                         {
@@ -657,21 +657,25 @@ namespace WolfAndSheep
                 return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
                 board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;
             }
+            //If Wold is on the right side
             if (wolfPos[1] == 7)
             {
                 return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
                 board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
             }
+            //If Wold is on the top side
             if  (wolfPos[0] == 0)
             {
                 return board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
                 board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false;
             }
+            //If Wold is on the bottom side
             if  (wolfPos[0] == 7)
             {
                 return board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
                 board[wolfPos[1]-1,wolfPos[0]-1].isPlayable == false;
             }
+            //If Wold is on the middle of the board
             else
             {
                 return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
@@ -683,31 +687,37 @@ namespace WolfAndSheep
 
         /*Funçao que verifica qual SHEEP o jogador escolheu e que é chamada 
         novamente caso o jogador nao escolha uma das 4 opçoes*/
-        private static (int, int) sheepChosen(string auxTemp)
+        private static (int, int, string) sheepChosen(string aux3)
         {
-            switch (auxTemp)
+            switch (aux3)
             {
                 case "S1":
+                    aux3 = "S1";
                     sheepNewPos[0] = sheep1Pos[0];
                     sheepNewPos[1] = sheep1Pos[1];
                 break;
                 case "S2":
+                    aux3 = "S2";
                     sheepNewPos[0] = sheep2Pos[0];
                     sheepNewPos[1] = sheep2Pos[1];
                 break;
                 case "S3":
+                    aux3 = "S3";
                     sheepNewPos[0] = sheep3Pos[0];
                     sheepNewPos[1] = sheep3Pos[1];
                 break;
                 case "S4":
+                    aux3 = "S4";
                     sheepNewPos[0] = sheep4Pos[0];
                     sheepNewPos[1] = sheep4Pos[1];
                     break;
                 default:
-                    sheepChosen(auxTemp);
+                    Console.WriteLine("Not a Valid Choice, try again.");
+                    aux3 = Console.ReadLine().ToUpper();
+                    sheepChosen(aux3);
                     break;
             }
-            return (sheepNewPos[0],sheepNewPos[1]);
+            return (sheepNewPos[0],sheepNewPos[1], aux3);
         } 
     }
 
