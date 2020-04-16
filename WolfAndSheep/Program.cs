@@ -1,4 +1,9 @@
-﻿using System;
+﻿using System.Globalization;
+using System.IO;
+using System.Dynamic;
+using System.Collections;
+using System.Linq;
+using System;
 
 namespace WolfAndSheep
 {
@@ -39,7 +44,10 @@ namespace WolfAndSheep
 
         // Mensagem de erro
         const string errorMessage = "----------- Error Message -----------";
-           
+
+        //Variavel que verifica se a ovelha já se moveu
+        static bool hasMoved = false;
+
 
         static void Main(string[] args)
         {
@@ -114,24 +122,10 @@ namespace WolfAndSheep
                         }
 
                         //Converte a string do input para int
-                        try
-                        {
+                        if (CheckConvert(wolfPos[1], aux2, numberOfPlays))
                             wolfPos[1] = Convert.ToInt16(aux2);
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid position");
+                        else
                             continue;
-                        }
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid position.");
-                            continue;
-                        }
                         
 
                         // Se meter o número valido, sai do loop
@@ -184,51 +178,15 @@ namespace WolfAndSheep
                             gameOver = true;
                             break;
                         }
-                        
-                        try
-                        {
+                        if (CheckConvert(wolfNewPos[0], aux1, numberOfPlays))
                             wolfNewPos[0] = Convert.ToInt16(aux1);
-                        }
-                        // Aparece uma mensagem para inserir um número válido
-                        // caso o jogador insira um número muito grande
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
 
-                        try
-                        {
+                        if (CheckConvert(wolfNewPos[1], aux2, numberOfPlays))
                             wolfNewPos[1] = Convert.ToInt16(aux2);
-                        }
-                        // Aparece uma mensagem para inserir um número válido
-                        // caso o jogador insira um número muito grande
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
                         
                         // Se meter o número valido, movimenta o lobo
                         // Só aceita números com +1 ou -1 que a casa atual
@@ -292,46 +250,17 @@ namespace WolfAndSheep
                         
                         // Tentar converter o input para int
                         // Se não conseguir imprime mensagens de erro
-                        try 
-                        {
+                        if (CheckConvert(sheepTempPos[0], aux1, numberOfPlays))
                             sheepTempPos[0] = Convert.ToInt16(aux1);
-                        }
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
 
-                        try 
-                        {
+                        if (CheckConvert(sheepTempPos[1], aux2, numberOfPlays))
                             sheepTempPos[1] = Convert.ToInt16(aux2);
-                        }
-                        catch (OverflowException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("Please insert a valid number.");
+                        else
                             continue;
-                        }
-                        catch (FormatException)
-                        {
-                            Console.WriteLine(errorMessage);
-                            Console.WriteLine("");
-                            Console.WriteLine("The input must be a valid line" +
-                            " number or the 'exit' command.");
-                            continue;
-                        }
-                        
+                    
+                      
                         // Se meter o número valido, movimenta o lobo
                         // Só aceita números com +1 ou -1 que a casa atual 
                         if (legalMove("sheep"))     
@@ -365,14 +294,17 @@ namespace WolfAndSheep
                             sheep1Pos[1] = sheepNewPos[1];
                             break;
                         case "S2":
+                            hasMoved = true;
                             sheep2Pos[0] = sheepNewPos[0];
                             sheep2Pos[1] = sheepNewPos[1];
                             break;
                         case "S3":
+                            hasMoved = true;
                             sheep3Pos[0] = sheepNewPos[0];
                             sheep3Pos[1] = sheepNewPos[1];
                             break;
                         case "S4":
+                            hasMoved = true;
                             sheep4Pos[0] = sheepNewPos[0];
                             sheep4Pos[1] = sheepNewPos[1];
                             break;
@@ -609,7 +541,7 @@ namespace WolfAndSheep
             if (wolfPos[1] == 7)
             {
                 return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
+                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false;
             }
             // Se o Wolf estiver no quadrado de cima
             if  (wolfPos[0] == 0)
@@ -633,7 +565,120 @@ namespace WolfAndSheep
             }    
         }
 
-        // Verifica que Sheep foi escolhida
+        /*Funçao que verifica qual SHEEP o jogador escolheu e que é chamada 
+        novamente caso o jogador nao escolha uma das 4 opçoes*/
+        private static bool SheepEndGame(string aux3)
+        {
+            if (hasMoved == false)
+            {
+                if (aux3 == "S1")
+                {
+                    sheepNewPos[0] = sheep1Pos[0];
+                    sheepNewPos[1] = sheep1Pos[1];
+                    
+                    if (sheepNewPos[1] == 0)
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                    }
+                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
+                    {
+                        
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                    }
+                    else
+                    {
+                        
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                    }
+                }
+                
+                else if (aux3 == "S2")
+                {
+                    sheepNewPos[0] = sheep2Pos[0];
+                    sheepNewPos[1] = sheep2Pos[1];
+                    
+                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
+                    {
+                        return true;
+                    }
+                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                    }
+                    else
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                    }
+                }
+
+                else if (aux3 == "S3")
+                {
+                    sheepNewPos[0] = sheep3Pos[0];
+                    sheepNewPos[1] = sheep3Pos[1];
+                    
+                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
+                    {
+                        return true;
+                    }
+                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                    }
+                    else
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                    }
+                }
+
+                else if (aux3 == "S4")
+                {
+                    sheepNewPos[0] = sheep4Pos[0];
+                    sheepNewPos[1] = sheep4Pos[1];
+                    
+                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
+                    {
+                        return true;
+                    }
+                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                    }
+                    else
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
+                    {
+                        return true;
+                    }
+                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                    }
+                    else
+                    {
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                    }
+            }
+
+        }
         private static (int, int, string) sheepChosen(string aux3)
         {
             switch (aux3)
@@ -642,21 +687,47 @@ namespace WolfAndSheep
                     sheepNewPos[0] = sheep1Pos[0];
                     sheepNewPos[1] = sheep1Pos[1];
                     auxTemp = "S1";
-                    break;
+                    if(SheepEndGame(aux3))
+                    {
+                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        auxTemp = "invalid";
+                        break;
+                    }
+                        
+
+                break;
                 case "S2":
                     sheepNewPos[0] = sheep2Pos[0];
                     sheepNewPos[1] = sheep2Pos[1];
                     auxTemp = "S2";
-                    break;
+                    if(SheepEndGame(aux3))
+                    {
+                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        auxTemp = "invalid";
+                        break;
+                    }
+                break;
                 case "S3":
                     sheepNewPos[0] = sheep3Pos[0];
                     sheepNewPos[1] = sheep3Pos[1];
                     auxTemp = "S3";
+                    if(SheepEndGame(aux3))
+                    {
+                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        auxTemp = "invalid";
+                        break;
+                    }
                     break;
                 case "S4":
                     sheepNewPos[0] = sheep4Pos[0];
                     sheepNewPos[1] = sheep4Pos[1];
                     auxTemp = "S4";
+                    if(SheepEndGame(aux3))
+                    {
+                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        auxTemp = "invalid";
+                        break;
+                    }
                     break;
                 default:
                     Console.WriteLine("Not a Valid Choice, try again.");
@@ -664,7 +735,48 @@ namespace WolfAndSheep
                     break;
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
-        } 
+        }
+        private static bool CheckConvert(int aux1, string aux2, int numberOfPlays)
+        {
+
+            // Mensagem de erro
+            const string errorMessage = "----------- INVALID INPUT -----------";
+            string errorBar = string.Concat(Enumerable.Repeat("-", 37));
+
+            bool canConvert; 
+            try
+            {
+                aux1 = Convert.ToInt16(aux2);
+                canConvert = true;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine(errorMessage);
+                Console.WriteLine("");
+                if (numberOfPlays > 0)
+                    Console.WriteLine("Please insert a valid number.\n");
+                else
+                    Console.WriteLine("Please insert a valid initial position.\n");
+                canConvert = false;
+                Console.WriteLine(errorBar);
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine(errorMessage);
+                Console.WriteLine("");
+                if (numberOfPlays > 0)
+                    Console.WriteLine("The input must be a valid line" +
+                " number or the 'exit' command.\n");
+                else
+                    Console.WriteLine("Please insert a number, not a string.\n");
+                
+                canConvert = false;
+                Console.WriteLine(errorBar);
+            }
+
+            return canConvert;
+
+        }
     }
 
 
