@@ -635,8 +635,19 @@ namespace WolfAndSheep
 
                 //Converte a string do input para int
                 if (checkConvert(wolfPos[1], aux2, numberOfPlays))
+                   { 
                         wolfPos[1] = Convert.ToInt16(aux2);
-
+                        if(wolfPos[1] >= 8 || wolfPos[1] <= 0)
+                        {
+                            Console.WriteLine("----------- INVALID INPUT"+ "-----------\n");
+                            Console.WriteLine($"The wolf can only start on the first line.");
+                            Console.WriteLine("----------------------------"+
+                            "---------\n");
+                            wolfPos[1] = 0;
+                            continue;
+                        }
+                            
+                    }
                 else
                     continue;
                 
