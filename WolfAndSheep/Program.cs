@@ -374,7 +374,7 @@ namespace WolfAndSheep
             if (wolfPos[1] == 7)
             {
                 return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false;
+                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
             }
             // Se o Wolf estiver no quadrado de cima
             if  (wolfPos[0] == 0)
