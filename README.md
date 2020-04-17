@@ -14,12 +14,12 @@ A maior parte das tarefas foram realizadas por mais de um elemento.
 Tarefas realizadas por ordem cronológica
 |Gonçalo Verde|Luiz Santos|Pedro Marques|
 |:-:|:-:|:-:|
-|Input inicial do Utilizador|Classe Square|Classe Square|
+|_Input_ inicial do Utilizador|Classe _Square_|Classe _Square_|
 |Criação das ovelhas|_Gameloop_ geral|Criação do Lobo/Método _Intro_ /Método _Victory_|
-|_Gameloop_ das ovelhas|Movimentação com input|_Gameloop_ do lobo|
+|_Gameloop_ das ovelhas|Movimentação com _input_|_Gameloop_ do lobo|
 |Limitação do movimento das ovelhas|_Try-Catch_ do lobo|Limitação do movimento do lobo|
 |Método _WolfGameOver_|_Try-Catch_ das ovelhas|Método _PrintBoard_|
-|Método _SheepGameOver_ / Método SheepChosen|Método _CheckConvert_|Método _LegalMove_|
+|Método _SheepGameOver_ / Método _SheepChosen_|Método _CheckConvert_|Método _LegalMove_|
 |Documentação XML|Fluxograma|Relatório|
 
 ---
@@ -67,7 +67,7 @@ Mais tarde, para uma melhor organização do código, dividimos as "responsabili
   - Imprime o tabuleiro do jogo;
 
 - #### _CheckConvert()_;
-  - Imprime mensagens de erros se o _input_ do utilizar não estiver correto;
+  - Imprime mensagens de erro se o _input_ do utilizador não estiver correto;
 
 - #### _FirstTurn()_;
   - Primeiro turno do jogo;
