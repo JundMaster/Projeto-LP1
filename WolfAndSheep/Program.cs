@@ -129,6 +129,7 @@ namespace WolfAndSheep
                     Console.WriteLine("-- S1     S2     S3    S4 --");
                     aux3 = Console.ReadLine().ToUpper();
                     SheepChosen(aux3);
+                    Console.WriteLine($"auxTemp : {auxTemp}");
                     if (auxTemp == "invalid")
                         continue;
                     Console.Write($"You chose {aux3}\n");
@@ -304,7 +305,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_02")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" {S2} ");
+                                        Console.Write(" <S2> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -312,7 +313,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_03")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" >S3< ");
+                                        Console.Write(" <S3> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -320,7 +321,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_04")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" [S4] ");
+                                        Console.Write(" <S4> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -458,7 +459,7 @@ namespace WolfAndSheep
 
                 else if (aux3 == "S3")
                 {
-                    sheepNewPos[0] = sheep3Pos[0];
+                    sheepNewPos[0] = sheep3Pos[0];  
                     sheepNewPos[1] = sheep3Pos[1];
                     
                     if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
@@ -529,58 +530,28 @@ namespace WolfAndSheep
         /// e o seu nome</returns>
         private static (int, int, string) SheepChosen(string aux3)
         {
-            switch (aux3)
-            {
-                case "S1":
-                    sheepNewPos[0] = sheep1Pos[0];
-                    sheepNewPos[1] = sheep1Pos[1];
-                    auxTemp = "S1";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                        
+            int [][] sheepList = new int [4][] {sheep1Pos, sheep2Pos,
+            sheep3Pos, sheep4Pos};
 
-                break;
-                case "S2":
-                    sheepNewPos[0] = sheep2Pos[0];
-                    sheepNewPos[1] = sheep2Pos[1];
-                    auxTemp = "S2";
+            string [] sheepString = new string [4] {"S1", "S2", "S3", "S4"};
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (aux3 == sheepString[i])
+                {
+                    sheepNewPos[0] = sheepList[i][0];
+                    sheepNewPos[1] = sheepList[i][1];
+                    auxTemp = sheepString[i];
                     if(SheepGameOver(aux3))
                     {
                         Console.WriteLine("That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
-                        break;
-                    }
-                break;
-                case "S3":
-                    sheepNewPos[0] = sheep3Pos[0];
-                    sheepNewPos[1] = sheep3Pos[1];
-                    auxTemp = "S3";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
                     }
                     break;
-                case "S4":
-                    sheepNewPos[0] = sheep4Pos[0];
-                    sheepNewPos[1] = sheep4Pos[1];
-                    auxTemp = "S4";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Not a Valid Choice, try again.");
+                }
+                else
                     auxTemp = "invalid";
-                    break;
+                
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         }
