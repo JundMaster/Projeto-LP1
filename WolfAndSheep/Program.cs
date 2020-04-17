@@ -32,11 +32,14 @@ namespace WolfAndSheep
         static int [] sheep2Pos = new int[2] {7, 2};
         static int [] sheep3Pos = new int[2] {7, 4};
         static int [] sheep4Pos = new int[2] {7, 6};
-
-        //Variavel que verifica se a ovelha já se moveu
-        static bool hasMoved = false;
-
+        // Mensagem de erro
+        public static string errorMessage = "\n --------------------- INVALID "+ "INPUT ---------------------\n";
+        
         public static string auxTemp = "";
+        
+        public static string validNumMessage = " Please, insert a" 
+        +" valid number!";
+        public static string initialNum = " --  1         3         5"+"         7  --";
 
         // Varíaveis temporárias para o input do jogador
         static string aux1, aux2, aux3;
@@ -46,9 +49,6 @@ namespace WolfAndSheep
 
         // Variável para o número de jogadas
         static int numberOfPlays = 0;
-
-        // Mensagem de erro
-        const string errorMessage = " ----------- Error Message -----------";
 
         /// <summary>
         /// Método main chama as funções para correr o jogo
@@ -124,7 +124,6 @@ namespace WolfAndSheep
                 else if (numberOfPlays % 2 == 0)
                 {   
                     Console.WriteLine("");
-                    Console.WriteLine("");
                     Console.WriteLine(" -------------------------------------" +
                                         " FLOCK TURN --------");
                     Console.WriteLine("\n Choose a Sheep to play:\n");
@@ -132,7 +131,21 @@ namespace WolfAndSheep
                     aux3 = Console.ReadLine().ToUpper();
                     SheepChosen(aux3);
                     if (auxTemp == "invalid")
-                        continue;
+                        {
+                            PrintBoard(board);
+                            Console.WriteLine(errorMessage);
+                            Console.WriteLine("That is not a valid"+
+                            " sheep choice.");
+                            continue;
+                        }
+                    else if(auxTemp == "blocked")
+                    {
+                        PrintBoard(board);
+                        Console.WriteLine(errorMessage);
+                        Console.WriteLine("That sheep is blocked."+
+                        "Pick another one.");
+                        continue;   
+                    }
                     
                     SheepTurn(board);
                 }
@@ -214,7 +227,7 @@ namespace WolfAndSheep
 
             Console.WriteLine("\n -- Insert Wolf's Initial Square Number--");
             Thread.Sleep(200);
-            Console.WriteLine(" --  1         3          5         7  --");
+            Console.WriteLine(initialNum);
             Thread.Sleep(200);
         }
 
@@ -296,6 +309,8 @@ namespace WolfAndSheep
                 Console.WriteLine("");
                 Console.WriteLine("       0     1     2     3     4     5" +
                     "     6     7");
+                Console.WriteLine("    " + 
+                String.Concat(Enumerable.Repeat("__ ", 17)));
                 Console.WriteLine("");
                 for (int i = 0; i < 8; i++)
                 {
@@ -307,9 +322,9 @@ namespace WolfAndSheep
                         // Imprime o número à esquerda do tabuleiro
                         // só na linha do meio de cada quadrado
                         if (boardTemp == 1)
-                            Console.Write($" {i}   ");
+                            Console.Write($" {i} | ");
                         else
-                            Console.Write($"     ");
+                            Console.Write("   | ");
 
                         for (int j = 0; j < 8; j++)
                         {
@@ -334,7 +349,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_02")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" {S2} ");
+                                        Console.Write(" <S2> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -342,7 +357,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_03")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" >S3< ");
+                                        Console.Write(" <S3> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -350,7 +365,7 @@ namespace WolfAndSheep
                                 else if (board[i,j].animal == "Sheep_04")
                                 {
                                     if (boardTemp == 1)
-                                        Console.Write(" [S4] ");
+                                        Console.Write(" <S4> ");
                                     else
                                         Console.Write("      ");
                                 }
@@ -362,7 +377,7 @@ namespace WolfAndSheep
                                     if (boardTemp == 1)
                                         Console.Write($"  {i}{j}  ");
                                     else
-                                        Console.Write($"      ");
+                                        Console.Write("      ");
                                 }
 
                                 // Se não der para jogar imprime a branco
@@ -373,7 +388,9 @@ namespace WolfAndSheep
                             {
                                 // Imprime os números no fim do tabuleiro
                                 if (boardTemp == 1)
-                                    Console.Write($"   {i}");
+                                    Console.Write($" | {i}");
+                                else
+                                    Console.Write(" |    ");
 
                                 Console.WriteLine("");
                                 // Incrementa a variável para sair do while
@@ -383,8 +400,12 @@ namespace WolfAndSheep
                     }
                 }
                 // Imprime números em baixo do tabuleiro
+                Console.WriteLine("    " + 
+                String.Concat(Enumerable.Repeat("__ ", 17)));
                 Console.WriteLine("\n       0     1     2     3     4     5" +
                     "     6     7");
+                
+                    
         }
     
         /// <summary>
@@ -395,39 +416,41 @@ namespace WolfAndSheep
         /// possíveis e "Falso" se ainda existirem jogadas. </returns>
         private static bool WolfGameOver()
         {
+            bool gameOver;
             // Se o Wolf estiver no quadrado da esquerda
             if (wolfPos[1] == 0)
             {
-                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
+                gameOver = board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
                 board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;
             }
             // Se o Wolf estiver no quadrado da direita
-            if (wolfPos[1] == 7)
+            else if (wolfPos[1] == 7)
             {
-                return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false;
+                gameOver = board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
+                board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
             }
             // Se o Wolf estiver no quadrado de cima
-            if  (wolfPos[0] == 0)
+            else if  (wolfPos[0] == 0)
             {
-                return board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
+                gameOver = board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
                 board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false;
             }
             // Se o Wolf estiver no quadrado de baixo
-            if  (wolfPos[0] == 7)
+            else if  (wolfPos[0] == 7)
             {
-                return board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
+                gameOver = board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
                 board[wolfPos[1]-1,wolfPos[0]-1].isPlayable == false;
             }
-            // Se o Wolf estiver no quadrado da esquerda
+            // Se o Wolf estiver em outros pontos do tabuleiro
             else
             {
             
-                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
+                gameOver = board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
                 board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false &&
                 board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
                 board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;        
-            }    
+            } 
+            return gameOver;   
         }
         
         /// <summary>
@@ -441,114 +464,92 @@ namespace WolfAndSheep
         /// possíveis e "Falso" se ainda existirem jogadas. </returns>
         private static bool SheepGameOver(string aux3)
         {
-            if (hasMoved == false)
+            bool gameOver;
+            if (aux3 == "S1")
             {
-                if (aux3 == "S1")
-                {
-                    sheepNewPos[0] = sheep1Pos[0];
-                    sheepNewPos[1] = sheep1Pos[1];
-                    
-                    if (sheepNewPos[1] == 0)
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    else
-                    {
-                        
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
+                sheepNewPos[0] = sheep1Pos[0];
+                sheepNewPos[1] = sheep1Pos[1];
                 
-                else if (aux3 == "S2")
-                {
-                    sheepNewPos[0] = sheep2Pos[0];
-                    sheepNewPos[1] = sheep2Pos[1];
-                    
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
+                if (sheepNewPos[1] == 0)
+                {   
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                 }
-
-                else if (aux3 == "S3")
-                {
-                    sheepNewPos[0] = sheep3Pos[0];
-                    sheepNewPos[1] = sheep3Pos[1];
+                else if (sheepNewPos[0] == 0)
+                    gameOver = true;
                     
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
-
-                else if (aux3 == "S4")
-                {
-                    sheepNewPos[0] = sheep4Pos[0];
-                    sheepNewPos[1] = sheep4Pos[1];
-                    
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
                 else
                 {
-                    return false;
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+            }
+            
+            else if (aux3 == "S2")
+            {
+                sheepNewPos[0] = sheep2Pos[0];
+                sheepNewPos[1] = sheep2Pos[1];
+                
+                if (sheepNewPos[1] == 0)
+                {
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    gameOver = true;
+
+                else
+                {
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+                
+            }
+
+            else if (aux3 == "S3")
+            {
+                sheepNewPos[0] = sheep3Pos[0];  
+                sheepNewPos[1] = sheep3Pos[1];
+                
+                
+                if (sheepNewPos[1] == 0)
+                {
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    gameOver = true;
+
+                else
+                {
+                    
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+            }
+
+            else if (aux3 == "S4")
+            {
+                sheepNewPos[0] = sheep4Pos[0];
+                sheepNewPos[1] = sheep4Pos[1];
+
+               
+                if (sheepNewPos[1] == 0)
+                {
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    gameOver = true;
+
+                else
+                {
+                    
+                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                 }
             }
             else
             {
-                if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;                   
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
+                gameOver = false;
             }
-
+            return gameOver; 
         }
         
         /// <summary>
@@ -559,59 +560,25 @@ namespace WolfAndSheep
         /// e o seu nome</returns>
         private static (int, int, string) SheepChosen(string aux3)
         {
-            switch (aux3)
-            {
-                case "S1":
-                    sheepNewPos[0] = sheep1Pos[0];
-                    sheepNewPos[1] = sheep1Pos[1];
-                    auxTemp = "S1";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine(" That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                        
+            int [][] sheepList = new int [4][] {sheep1Pos, sheep2Pos,
+            sheep3Pos, sheep4Pos};
 
-                break;
-                case "S2":
-                    sheepNewPos[0] = sheep2Pos[0];
-                    sheepNewPos[1] = sheep2Pos[1];
-                    auxTemp = "S2";
+            string [] sheepString = new string [4] {"S1", "S2", "S3", "S4"};
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (aux3 == sheepString[i])
+                {
+                    sheepNewPos[0] = sheepList[i][0];
+                    sheepNewPos[1] = sheepList[i][1];
+                    auxTemp = sheepString[i];
                     if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine(" That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                break;
-                case "S3":
-                    sheepNewPos[0] = sheep3Pos[0];
-                    sheepNewPos[1] = sheep3Pos[1];
-                    auxTemp = "S3";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine(" That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
+                        auxTemp = "blocked";
                     break;
-                case "S4":
-                    sheepNewPos[0] = sheep4Pos[0];
-                    sheepNewPos[1] = sheep4Pos[1];
-                    auxTemp = "S4";
-                    if(SheepGameOver(aux3))
-                    {
-                        Console.WriteLine(" That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                    break;
-                default:
-                    PrintBoard(board);
-                    Console.WriteLine("\n Not a Valid Choice, try again.");
+                }
+                else
                     auxTemp = "invalid";
-                    break;
+                
             }
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         }
@@ -631,9 +598,6 @@ namespace WolfAndSheep
             Square[,] board)
         {
             Console.WriteLine("");
-            // Mensagem de erro
-            const string errorMessage = " ----------- INVALID INPUT -----------";
-
             bool canConvert; 
             try
             {
@@ -642,32 +606,25 @@ namespace WolfAndSheep
             }
             catch (OverflowException)
             {
-                PrintBoard(board);
-                Console.WriteLine("");
+                if (numberOfPlays != 0)
+                    PrintBoard(board);
                 Console.WriteLine(errorMessage);
-                Console.WriteLine("");
-                Console.WriteLine(" Please insert a valid position.");
+                Console.WriteLine(validNumMessage);
                 canConvert = false;
+                if (numberOfPlays == 0)
+                    Console.WriteLine(initialNum);
+
             }
             catch (FormatException)
             {
-                PrintBoard(board);
-                Console.WriteLine("");
+                if (numberOfPlays != 0)
+                    PrintBoard(board);
                 Console.WriteLine(errorMessage);
-                Console.WriteLine("");
-                Console.WriteLine(" Please insert a number, not a string.");
-                
+                Console.WriteLine(" Please, insert a number, not a string!");
                 canConvert = false;
+                if (numberOfPlays == 0)
+                    Console.WriteLine(initialNum);
             }
-            catch (IndexOutOfRangeException)
-            {
-                Console.WriteLine(errorMessage);
-                Console.WriteLine("");
-                Console.WriteLine(" The Wolf can only start on the first" +
-                    " line.");
-                canConvert = false;
-            }
-            
             return canConvert;
         }
     
@@ -699,15 +656,12 @@ namespace WolfAndSheep
                         wolfPos[1] = Convert.ToInt16(aux2);
                         if(wolfPos[1] >= 8 || wolfPos[1] <= 0)
                         {
-                            Console.WriteLine(" ----------- INVALID INPUT"+ 
-                                "-----------\n");
-                            Console.WriteLine($" The wolf can only start on " +
-                                "the first line.");
-                            Console.WriteLine("");
+                            Console.WriteLine(errorMessage);
+                            Console.Write(validNumMessage);
+                            Console.WriteLine(initialNum);
                             wolfPos[1] = 0;
                             continue;
-                        }
-                            
+                        }     
                     }
                 else
                     continue;
@@ -719,11 +673,10 @@ namespace WolfAndSheep
                     break;
                 }
 
-                Console.WriteLine(" -------------------------"+ 
-                                "-----------\n");
+                Console.WriteLine(errorMessage);
                 // Se não for válido vai repetir o processo
-                Console.WriteLine(" Please choose a valid number");
-                Console.WriteLine("\n --  1         3          5         7  --");
+                Console.WriteLine(validNumMessage);
+                Console.WriteLine($"\n{initialNum}");
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
@@ -797,10 +750,9 @@ namespace WolfAndSheep
 
                 PrintBoard(board);
                 
-                Console.WriteLine(" -------------------------"+ 
-                                "-----------\n");
+                Console.WriteLine(errorMessage);
                 // Se o Input não for válido vai repetir o loop
-                Console.WriteLine(" Please choose a valid number");
+                Console.WriteLine(validNumMessage);
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
@@ -863,9 +815,8 @@ namespace WolfAndSheep
 
                 PrintBoard(board);
 
-                Console.WriteLine(" -------------------------"+ 
-                                "-----------\n");
-                Console.WriteLine(" Please choose a valid number");
+                Console.WriteLine(errorMessage);
+                Console.WriteLine(validNumMessage);
             } while(board[sheepNewPos[0], sheepNewPos[1]].isPlayable == false);
                 
             // Depois da jogada vai dar o valor da nova posição
@@ -873,22 +824,22 @@ namespace WolfAndSheep
             switch (aux3)
             {
                 case "S1":
-                    hasMoved = true;
+                    
                     sheep1Pos[0] = sheepNewPos[0];
                     sheep1Pos[1] = sheepNewPos[1];
                     break;
                 case "S2":
-                    hasMoved = true;
+                   
                     sheep2Pos[0] = sheepNewPos[0];
                     sheep2Pos[1] = sheepNewPos[1];
                     break;
                 case "S3":
-                    hasMoved = true;
+                    
                     sheep3Pos[0] = sheepNewPos[0];
                     sheep3Pos[1] = sheepNewPos[1];
                     break;
                 case "S4":
-                    hasMoved = true;
+                
                     sheep4Pos[0] = sheepNewPos[0];
                     sheep4Pos[1] = sheepNewPos[1];
                     break;
