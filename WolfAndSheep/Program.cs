@@ -32,8 +32,6 @@ namespace WolfAndSheep
         static int [] sheep3Pos = new int[2] {7, 4};
         static int [] sheep4Pos = new int[2] {7, 6};
 
-        //Variavel que verifica se a ovelha já se moveu
-        static bool hasMoved = false;
 
         public static string auxTemp = "";
 
@@ -412,114 +410,95 @@ namespace WolfAndSheep
         /// possíveis e "Falso" se ainda existirem jogadas. </returns>
         private static bool SheepGameOver(string aux3)
         {
-            if (hasMoved == false)
+            if (aux3 == "S1")
             {
-                if (aux3 == "S1")
-                {
-                    sheepNewPos[0] = sheep1Pos[0];
-                    sheepNewPos[1] = sheep1Pos[1];
-                    
-                    if (sheepNewPos[1] == 0)
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    else
-                    {
-                        
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
+                sheepNewPos[0] = sheep1Pos[0];
+                sheepNewPos[1] = sheep1Pos[1];
                 
-                else if (aux3 == "S2")
+                if (sheepNewPos[1] == 0)
                 {
-                    sheepNewPos[0] = sheep2Pos[0];
-                    sheepNewPos[1] = sheep2Pos[1];
-                    
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                 }
-
-                else if (aux3 == "S3")
-                {
-                    sheepNewPos[0] = sheep3Pos[0];  
-                    sheepNewPos[1] = sheep3Pos[1];
+                if (sheepNewPos[0] == 0)
+                    return true;
                     
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
-
-                else if (aux3 == "S4")
-                {
-                    sheepNewPos[0] = sheep4Pos[0];
-                    sheepNewPos[1] = sheep4Pos[1];
-                    
-                    if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return true;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
-                }
                 else
                 {
-                    return false;
+                    
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+            }
+            
+            else if (aux3 == "S2")
+            {
+                sheepNewPos[0] = sheep2Pos[0];
+                sheepNewPos[1] = sheep2Pos[1];
+                
+                Console.WriteLine("fmkeowegfrwe");
+                if (sheepNewPos[1] == 0)
+                {
+                    Console.WriteLine("Here?");
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    return true;
+
+                else
+                {
+                    Console.WriteLine("or here?");
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+                
+            }
+
+            else if (aux3 == "S3")
+            {
+                sheepNewPos[0] = sheep3Pos[0];  
+                sheepNewPos[1] = sheep3Pos[1];
+                
+                
+                if (sheepNewPos[1] == 0)
+                {
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    return true;
+
+                else
+                {
+                    
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
+                }
+            }
+
+            else if (aux3 == "S4")
+            {
+                sheepNewPos[0] = sheep4Pos[0];
+                sheepNewPos[1] = sheep4Pos[1];
+
+               
+                if (sheepNewPos[1] == 0)
+                {
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                }
+                if (sheepNewPos[0] == 0)
+                    return true;
+
+                else
+                {
+                    
+                    return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                    board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                 }
             }
             else
             {
-                if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
-                    }
-                    if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;                   
-                    }
-                    else
-                    {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
-                    }
+                return false;
             }
-
+        
         }
         
         /// <summary>
@@ -794,22 +773,22 @@ namespace WolfAndSheep
             switch (aux3)
             {
                 case "S1":
-                    hasMoved = true;
+                    
                     sheep1Pos[0] = sheepNewPos[0];
                     sheep1Pos[1] = sheepNewPos[1];
                     break;
                 case "S2":
-                    hasMoved = true;
+                   
                     sheep2Pos[0] = sheepNewPos[0];
                     sheep2Pos[1] = sheepNewPos[1];
                     break;
                 case "S3":
-                    hasMoved = true;
+                    
                     sheep3Pos[0] = sheepNewPos[0];
                     sheep3Pos[1] = sheepNewPos[1];
                     break;
                 case "S4":
-                    hasMoved = true;
+                
                     sheep4Pos[0] = sheepNewPos[0];
                     sheep4Pos[1] = sheepNewPos[1];
                     break;
