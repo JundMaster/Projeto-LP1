@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Collections;
 using System.Linq;
 using System;
+using System.Threading;
 
 namespace WolfAndSheep
 {
@@ -47,15 +48,16 @@ namespace WolfAndSheep
         static int numberOfPlays = 0;
 
         // Mensagem de erro
-        const string errorMessage = "----------- Error Message -----------";
+        const string errorMessage = " ----------- Error Message -----------";
 
+        /// <summary>
+        /// Método main chama as funções para correr o jogo
+        /// </summary>
         static void Main(string[] args)
         {
-            
             Intro();
-
-            
             Game();
+            Console.WriteLine("\n Bye Bye");
         }
 
         /// <summary>
@@ -114,7 +116,7 @@ namespace WolfAndSheep
                 // Quando o numero de jogadas é ímpar
                 else if (numberOfPlays % 2 != 0)
                 {
-                    WolfTurn();
+                    WolfTurn(board);
                 }
                 
                 // Jogadas para A SHEEP
@@ -123,17 +125,16 @@ namespace WolfAndSheep
                 {   
                     Console.WriteLine("");
                     Console.WriteLine("");
-                    Console.WriteLine("----------------------- FLOCK TURN " +
-                                        "----------------------");
-                    Console.WriteLine("Choose a Sheep to play:\n");
-                    Console.WriteLine("-- S1     S2     S3    S4 --");
+                    Console.WriteLine(" -------------------------------------" +
+                                        " FLOCK TURN --------");
+                    Console.WriteLine("\n Choose a Sheep to play:\n");
+                    Console.Write(" -- S1     S2     S3    S4 --  : ");
                     aux3 = Console.ReadLine().ToUpper();
                     SheepChosen(aux3);
                     if (auxTemp == "invalid")
                         continue;
-                    Console.Write($"You chose {aux3}\n");
                     
-                    SheepTurn();
+                    SheepTurn(board);
                 }
                                             
                 // Posições dos animais
@@ -172,23 +173,49 @@ namespace WolfAndSheep
         private static void Intro()
         {
             Console.WriteLine("");
+            Console.WriteLine(@"             ___        ___               " +
+            " __        ___  ___  ___  ");
+            Console.WriteLine(@" \        / |   | |    |      _      _    " +
+            "|  ' |  | |    |    |   | ");
+            Console.WriteLine(@"  \  /\  /  |   | |    |--   |_||\ || \   " +
+            "|__  |--| |--  |--  |---  ");
+            Console.WriteLine(@"   \/  \/   |___| |___ |     | || \||_/   " +
+            ".__| |  | |___ |___ |     ");
+
             Console.WriteLine("");
-            Console.WriteLine("Both animals can only move" +
-                " ONE square per turn");
-            Console.WriteLine("Sheep can only move forward.");
-            Console.WriteLine("The wolf can move forward and backwards.");
-            Console.WriteLine("Only ONE sheep can move per turn.");
-            Console.WriteLine("The animals can only move to numbered empty" + 
-                " squares.");
-            Console.WriteLine("The wolf must reach the bottom squares.");
-            Console.WriteLine("The flock of sheep must block wolf's path.");
-            Console.WriteLine("The flock of sheep win if they block wolf's" +
-                " path.");
-            Console.WriteLine("Players must type the square's number to move" +
-                " the animal.");
             Console.WriteLine("");
-            Console.WriteLine("-- Insert Wolf's Initial Square Number--");
-            Console.WriteLine("-- 1     3     5    7 --");
+            Thread.Sleep(2000);
+            
+            Thread.Sleep(200);
+            Console.WriteLine(" INSTRUCTIONS:");
+            Console.WriteLine(" The wolf (WW) must reach the bottom squares" +
+                " to win.");
+            Thread.Sleep(200);
+            Console.WriteLine(" The flock of sheep (S1, S2, S3, S4) win the" +
+                " game if they block wolf's path.");
+            Thread.Sleep(200);
+            Console.WriteLine("\n Both animals can only move" +
+                @" ONE diagonal square per turn.");
+            Thread.Sleep(200);
+            Console.WriteLine(" The flock of sheep (S1, S2, S3, S4) can only" +
+                " move top.");
+            Thread.Sleep(200);
+            Console.WriteLine(" The wolf (WW) can move top and bottom");
+            Thread.Sleep(200);
+            Console.WriteLine(" The flock of sheep can ONLY move one sheep" +
+                " per turn.");
+            Thread.Sleep(200);
+            Console.WriteLine(" Both animals can only move to numbered/empty" + 
+                " squares, they can't move to occupied squares.");
+            Thread.Sleep(200);
+            Console.WriteLine("\n Players must type the board's row and" +
+                " column to move the animal.");
+            Thread.Sleep(200);
+
+            Console.WriteLine("\n -- Insert Wolf's Initial Square Number--");
+            Thread.Sleep(200);
+            Console.WriteLine(" --  1         3          5         7  --");
+            Thread.Sleep(200);
         }
 
         /// <summary>
@@ -203,8 +230,8 @@ namespace WolfAndSheep
         {
             Console.WriteLine(" ");
             Console.WriteLine(" ");
-            Console.WriteLine($"Congratulations, {animal} won the game !!!");
-            Console.WriteLine($"Number of total plays = {plays}");
+            Console.WriteLine($" Congratulations, {animal} won the game !!!");
+            Console.WriteLine($" Number of total plays = {plays}");
         }
         
         /// <summary>
@@ -257,14 +284,17 @@ namespace WolfAndSheep
         private static void PrintBoard(Square[,] board)
         {
                 // Imprime o tabuleiro
-                Console.WriteLine("---------------------------------");
-                Console.WriteLine("Numbers = Playable Squares");
-                Console.WriteLine("White Squares = Unplayable Squares");
-                Console.WriteLine("exit  <- to quit the game");
+                Console.WriteLine(" --------------------------------------" +
+                    "-------------------");
+                Console.WriteLine(" WW  -> Wolf");
+                Console.WriteLine(" S1, S2, S3, S4  -> Sheep");
+                Console.WriteLine(" Numbers  -> Playable Squares");
+                Console.WriteLine(" White Squares  -> Unplayable Squares");
+                Console.WriteLine(" Type ' exit ' to quit the game");
 
                 // Imprime números no topo do tabuleiro
                 Console.WriteLine("");
-                Console.WriteLine("      0     1     2     3     4     5" +
+                Console.WriteLine("       0     1     2     3     4     5" +
                     "     6     7");
                 Console.WriteLine("");
                 for (int i = 0; i < 8; i++)
@@ -277,9 +307,9 @@ namespace WolfAndSheep
                         // Imprime o número à esquerda do tabuleiro
                         // só na linha do meio de cada quadrado
                         if (boardTemp == 1)
-                            Console.Write($"{i}   ");
+                            Console.Write($" {i}   ");
                         else
-                            Console.Write($"    ");
+                            Console.Write($"     ");
 
                         for (int j = 0; j < 8; j++)
                         {
@@ -353,7 +383,7 @@ namespace WolfAndSheep
                     }
                 }
                 // Imprime números em baixo do tabuleiro
-                Console.WriteLine("\n      0     1     2     3     4     5" +
+                Console.WriteLine("\n       0     1     2     3     4     5" +
                     "     6     7");
         }
     
@@ -537,7 +567,7 @@ namespace WolfAndSheep
                     auxTemp = "S1";
                     if(SheepGameOver(aux3))
                     {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        Console.WriteLine(" That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
                         break;
                     }
@@ -550,7 +580,7 @@ namespace WolfAndSheep
                     auxTemp = "S2";
                     if(SheepGameOver(aux3))
                     {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        Console.WriteLine(" That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
                         break;
                     }
@@ -561,7 +591,7 @@ namespace WolfAndSheep
                     auxTemp = "S3";
                     if(SheepGameOver(aux3))
                     {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        Console.WriteLine(" That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
                         break;
                     }
@@ -572,13 +602,14 @@ namespace WolfAndSheep
                     auxTemp = "S4";
                     if(SheepGameOver(aux3))
                     {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        Console.WriteLine(" That sheep is blocked. Pick another one.");
                         auxTemp = "invalid";
                         break;
                     }
                     break;
                 default:
-                    Console.WriteLine("Not a Valid Choice, try again.");
+                    PrintBoard(board);
+                    Console.WriteLine("\n Not a Valid Choice, try again.");
                     auxTemp = "invalid";
                     break;
             }
@@ -592,14 +623,16 @@ namespace WolfAndSheep
         /// conversão para inteiro</param>
         /// <param name="aux2"> Variável que guarda O Input do jogador em 
         /// formato string para conversão</param>
+        /// <param name="numberOfPlays"> Número de jogadas até ao momento</param>
+        /// <param name="board"> Array que contém o tabuleiro de jogo</param>
         /// <returns>Retorna "True" caso o Input seja válido ou "Falso" caso 
         /// seja inválido</returns>
-        private static bool CheckConvert(int aux1, string aux2, int numberOfPlays)
+        private static bool CheckConvert(int aux1, string aux2, int numberOfPlays,
+            Square[,] board)
         {
-
+            Console.WriteLine("");
             // Mensagem de erro
-            const string errorMessage = "----------- INVALID INPUT -----------";
-            string errorBar = string.Concat(Enumerable.Repeat("-", 37));
+            const string errorMessage = " ----------- INVALID INPUT -----------";
 
             bool canConvert; 
             try
@@ -609,28 +642,30 @@ namespace WolfAndSheep
             }
             catch (OverflowException)
             {
+                PrintBoard(board);
+                Console.WriteLine("");
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                Console.WriteLine("Please insert a valid initial position.\n");
+                Console.WriteLine(" Please insert a valid position.");
                 canConvert = false;
-                Console.WriteLine(errorBar);
             }
             catch (FormatException)
             {
+                PrintBoard(board);
+                Console.WriteLine("");
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                Console.WriteLine("Please insert a number, not a string.\n");
+                Console.WriteLine(" Please insert a number, not a string.");
                 
                 canConvert = false;
-                Console.WriteLine(errorBar);
             }
             catch (IndexOutOfRangeException)
             {
                 Console.WriteLine(errorMessage);
                 Console.WriteLine("");
-                Console.WriteLine("The Wolf can only start on the first line.\n");
+                Console.WriteLine(" The Wolf can only start on the first" +
+                    " line.");
                 canConvert = false;
-                Console.WriteLine(errorBar);
             }
             
             return canConvert;
@@ -648,8 +683,8 @@ namespace WolfAndSheep
                 Console.WriteLine("");
                 
                 // Pedir input ao jogador
-                Console.Write("Insert a starting position: ");
-                aux2 = Console.ReadLine();
+                Console.Write(" Insert a starting position: ");
+                aux2 = Console.ReadLine().ToLower();
 
                 // Se escrever exit, sai do jogo
                 if (aux2 == "exit")
@@ -659,15 +694,16 @@ namespace WolfAndSheep
                 }
 
                 //Converte a string do input para int
-                if (CheckConvert(wolfPos[1], aux2, numberOfPlays))
+                if (CheckConvert(wolfPos[1], aux2, numberOfPlays, board))
                    { 
                         wolfPos[1] = Convert.ToInt16(aux2);
                         if(wolfPos[1] >= 8 || wolfPos[1] <= 0)
                         {
-                            Console.WriteLine("----------- INVALID INPUT"+ "-----------\n");
-                            Console.WriteLine($"The wolf can only start on the first line.");
-                            Console.WriteLine("----------------------------"+
-                            "---------\n");
+                            Console.WriteLine(" ----------- INVALID INPUT"+ 
+                                "-----------\n");
+                            Console.WriteLine($" The wolf can only start on " +
+                                "the first line.");
+                            Console.WriteLine("");
                             wolfPos[1] = 0;
                             continue;
                         }
@@ -683,21 +719,24 @@ namespace WolfAndSheep
                     break;
                 }
 
+                Console.WriteLine(" -------------------------"+ 
+                                "-----------\n");
                 // Se não for válido vai repetir o processo
-                Console.WriteLine(" ");
-                Console.WriteLine("Please choose a valid number");
+                Console.WriteLine(" Please choose a valid number");
+                Console.WriteLine("\n --  1         3          5         7  --");
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
         /// <summary>
         /// Função que controla todo o Input do Turno do Lobo
         /// </summary>
-        private static void WolfTurn()
+        /// <param name="board"> Array que contém o tabuleiro de jogo</param>
+        private static void WolfTurn(Square[,] board)
         {
             do 
             {
-                Console.WriteLine(" ");
-                Console.WriteLine("----------------------- WOLF TURN " +
+                Console.WriteLine("");
+                Console.WriteLine(" --------- WOLF TURN --------------" +
                                 "-----------------------");
                 
                 // Verifica se o Wolf tem jogadas possíveis
@@ -712,11 +751,11 @@ namespace WolfAndSheep
                     break;
                 }
 
-                Console.Write("\nInsert a row number: ");
-                aux1 = Console.ReadLine();
+                Console.Write("\n Insert a row number: ");
+                aux1 = Console.ReadLine().ToLower();
 
-                Console.Write("Insert a column number: ");
-                aux2 = Console.ReadLine();
+                Console.Write(" Insert a column number: ");
+                aux2 = Console.ReadLine().ToLower();
 
                 // Se escrever exit, sai do jogo
                 if (aux1 == "exit" || aux2 == "exit")
@@ -724,12 +763,13 @@ namespace WolfAndSheep
                     gameOver = true;
                     break;
                 }
-                if (CheckConvert(wolfNewPos[0], aux1, numberOfPlays))
+
+                if (CheckConvert(wolfNewPos[0], aux1, numberOfPlays, board))
                     wolfNewPos[0] = Convert.ToInt16(aux1);
                 else
                     continue;
 
-                if (CheckConvert(wolfNewPos[1], aux2, numberOfPlays))
+                if (CheckConvert(wolfNewPos[1], aux2, numberOfPlays, board))
                     wolfNewPos[1] = Convert.ToInt16(aux2);
                 else
                     continue;
@@ -754,25 +794,30 @@ namespace WolfAndSheep
                         break; 
                     }
                 }
+
+                PrintBoard(board);
                 
+                Console.WriteLine(" -------------------------"+ 
+                                "-----------\n");
                 // Se o Input não for válido vai repetir o loop
-                Console.WriteLine("");
-                Console.WriteLine("Please choose a valid number");
+                Console.WriteLine(" Please choose a valid number");
             } while(board[wolfPos[0], wolfPos[1]].isPlayable == false);
         }
     
         /// <summary>
         /// Função que controla todo o Input do Turno das Ovelhas
         /// </summary>
-        private static void SheepTurn()
+        /// <param name="board"> Array que contém o tabuleiro de jogo</param>
+        private static void SheepTurn(Square[,] board)
         {
             do
             {
+                Console.Write($"\n You chose {aux3}\n");
                 // Pedir input ao jogador
-                Console.Write("Insert a row number: ");
-                aux1 = Console.ReadLine();
-                Console.Write("Insert a column num: ");
-                aux2 = Console.ReadLine();
+                Console.Write("\n Insert a row number: ");
+                aux1 = Console.ReadLine().ToLower();
+                Console.Write(" Insert a column num: ");
+                aux2 = Console.ReadLine().ToLower();
 
                 // Se escrever exit, sai do jogo
                 if (aux1 == "exit" || aux2 == "exit")
@@ -783,12 +828,12 @@ namespace WolfAndSheep
                 
                 // Tentar converter o input para int
                 // Se não conseguir imprime mensagens de erro
-                if (CheckConvert(sheepTempPos[0], aux1, numberOfPlays))
+                if (CheckConvert(sheepTempPos[0], aux1, numberOfPlays, board))
                     sheepTempPos[0] = Convert.ToInt16(aux1);
                 else
                     continue;
 
-                if (CheckConvert(sheepTempPos[1], aux2, numberOfPlays))
+                if (CheckConvert(sheepTempPos[1], aux2, numberOfPlays, board))
                     sheepTempPos[1] = Convert.ToInt16(aux2);
                 else
                     continue;
@@ -815,7 +860,12 @@ namespace WolfAndSheep
                         break;
                     }
                 }
-                Console.WriteLine("Please choose a valid number");
+
+                PrintBoard(board);
+
+                Console.WriteLine(" -------------------------"+ 
+                                "-----------\n");
+                Console.WriteLine(" Please choose a valid number");
             } while(board[sheepNewPos[0], sheepNewPos[1]].isPlayable == false);
                 
             // Depois da jogada vai dar o valor da nova posição
