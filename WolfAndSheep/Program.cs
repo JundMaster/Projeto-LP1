@@ -489,7 +489,7 @@ namespace WolfAndSheep
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
                         return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
+                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     else
                     {
@@ -506,12 +506,11 @@ namespace WolfAndSheep
             {
                 if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
                     {
-                        return true;
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
-                        board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;                   
                     }
                     else
                     {
