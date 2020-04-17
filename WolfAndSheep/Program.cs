@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Security.Cryptography;
+using System.Globalization;
 using System.IO;
 using System.Dynamic;
 using System.Collections;
@@ -31,6 +32,7 @@ namespace WolfAndSheep
         static int [] sheep2Pos = new int[2] {7, 2};
         static int [] sheep3Pos = new int[2] {7, 4};
         static int [] sheep4Pos = new int[2] {7, 6};
+        
 
         //Variavel que verifica se a ovelha já se moveu
         static bool hasMoved = false;
@@ -114,7 +116,17 @@ namespace WolfAndSheep
                 // Quando o numero de jogadas é ímpar
                 else if (numberOfPlays % 2 != 0)
                 {
-                    wolfTurn();
+                    try
+                    {
+                        wolfTurn();
+                    }
+                    catch(IndexOutOfRangeException)
+                    {
+                        victory("Sheep", numberOfPlays);
+                        gameOver = true;
+                    }
+                    
+                   
                 }
                 
                 // Jogadas para A SHEEP
@@ -128,7 +140,7 @@ namespace WolfAndSheep
                     Console.WriteLine("Choose a Sheep to play:\n");
                     Console.WriteLine("-- S1     S2     S3    S4 --");
                     aux3 = Console.ReadLine().ToUpper();
-                    sheepChosen(aux3);
+                    SheepChosen(aux3);
                     if (auxTemp == "invalid")
                         continue;
                     Console.Write($"You chose {aux3}\n");
@@ -200,6 +212,7 @@ namespace WolfAndSheep
         // Só aceita números com +1 ou -1 que a casa atual 
         private static bool legalMove(string animal)
         {
+            bool legal;
             if (animal == "wolf")
                 // Verifica que tá a 1 quadrado de distância da posição atual
                 if (wolfNewPos[0] >= 0 && wolfNewPos[0] < 8 && 
@@ -210,9 +223,9 @@ namespace WolfAndSheep
                     wolfNewPos[1] < wolfPos[1] + 2 &&
                     wolfNewPos[0] > wolfPos[0] - 2 && 
                     wolfNewPos[1] > wolfPos[1] - 2)
-                    return true;
+                    legal = true;
                 else
-                    return false;
+                    legal = false;
             else
                 // Verifica que tá a 1 quadrado de distância da posição atual
                 // e que a row é MENOR (para andar para cima)
@@ -224,9 +237,11 @@ namespace WolfAndSheep
                     sheepTempPos[1] < sheepNewPos[1] + 2 &&
                     sheepTempPos[0] > sheepNewPos[0] - 2 && 
                     sheepTempPos[1] > sheepNewPos[1] - 2)
-                    return true;
+                    legal = true;
                 else
-                    return false;
+                    legal = false;
+
+            return legal;
         }
 
         // Função que imprime no ecrã as jogadas possíveis do WOLF
@@ -354,44 +369,47 @@ namespace WolfAndSheep
         // Verifica se o Wolf tem mais jogadas possíveis
         private static bool wolfGameOver()
         {
+            bool gameOverAux;
             // Se o Wolf estiver no quadrado da esquerda
             if (wolfPos[1] == 0)
             {
-                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
-                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;
+                gameOverAux = (board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false && 
+                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false);
             }
             // Se o Wolf estiver no quadrado da direita
             if (wolfPos[1] == 7)
             {
-                return board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false;
+                gameOverAux = ( board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
+                board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false);
             }
             // Se o Wolf estiver no quadrado de cima
             if  (wolfPos[0] == 0)
             {
-                return board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
-                board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false;
+                gameOverAux = (board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false && 
+                board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false);
             }
             // Se o Wolf estiver no quadrado de baixo
             if  (wolfPos[0] == 7)
             {
-                return board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
-                board[wolfPos[1]-1,wolfPos[0]-1].isPlayable == false;
+                gameOverAux = (board[wolfPos[1]+1,wolfPos[0]-1].isPlayable == false && 
+                board[wolfPos[1]-1,wolfPos[0]-1].isPlayable == false);
             }
             // Se o Wolf estiver no quadrado da esquerda
             else
             {
-                return board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
+                gameOverAux = (board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false &&
                 board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false &&
                 board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false && 
-                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false;        
-            }    
+                board[wolfPos[0]-1,wolfPos[1]+1].isPlayable == false);        
+            }
+            return gameOverAux;    
         }
 
         // Verifica qual SHEEP o jogador escolheu
         // É chamada novamente caso o jogador nao escolha uma das 4 opções
         private static bool sheepGameOver(string aux3)
         {
+            bool gameOverAux;
             if (hasMoved == false)
             {
                 if (aux3 == "S1")
@@ -401,17 +419,17 @@ namespace WolfAndSheep
                     
                     if (sheepNewPos[1] == 0)
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
                         
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     else
                     {
                         
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
                 }
@@ -423,16 +441,16 @@ namespace WolfAndSheep
                     
                     if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
                     {
-                        return true;
+                        gameOverAux = true;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
                 }
@@ -444,16 +462,16 @@ namespace WolfAndSheep
                     
                     if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
                     {
-                        return true;
+                        gameOverAux = true;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
                 }
@@ -465,98 +483,70 @@ namespace WolfAndSheep
                     
                     if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
                     {
-                        return true;
+                        gameOverAux = true;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false;
                     }
                     else
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
                 }
                 else
                 {
-                    return false;
+                    gameOverAux = false;
                 }
             }
             else
             {
                 if (sheepNewPos[1] == 0 || sheepNewPos[0] == 0 )
                     {
-                        return true;
+                        gameOverAux = true;
                     }
                     if (sheepNewPos[1] == 7 || sheepNewPos[0] == 7 )
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false && 
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;
                     }
                     else
                     {
-                        return board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
+                        gameOverAux = board[sheepNewPos[0]-1,sheepNewPos[1]-1].isPlayable == false &&
                         board[sheepNewPos[0]-1,sheepNewPos[1]+1].isPlayable == false;        
                     }
+                
             }
-
+            return gameOverAux;
         }
-        private static (int, int, string) sheepChosen(string aux3)
+        private static (int, int, string) SheepChosen(string aux3)
         {
-            switch (aux3)
+            int [][] sheepList = new int [4][] {sheep1Pos, sheep2Pos, sheep3Pos,
+            sheep4Pos};
+            string [] sheepString = new string [4] {"S1", "S2", "S3", "S4"};
+                            
+            for (int i = 0; i < 4; i++)
             {
-                case "S1":
-                    sheepNewPos[0] = sheep1Pos[0];
-                    sheepNewPos[1] = sheep1Pos[1];
-                    auxTemp = "S1";
-                    if(sheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                        
+                Console.WriteLine($"sheepGameOver(aux3):"+
+                 $"{sheepGameOver(aux3)}");
 
-                break;
-                case "S2":
-                    sheepNewPos[0] = sheep2Pos[0];
-                    sheepNewPos[1] = sheep2Pos[1];
-                    auxTemp = "S2";
+                if(aux3 == sheepString[i])
+                {
+                    sheepNewPos[0] = sheepList[i][0];
+                    sheepNewPos[1] = sheepList[i][1];
+                    auxTemp = sheepString[i];  
                     if(sheepGameOver(aux3))
                     {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
+                        Console.WriteLine("That sheep is blocked. "+
+                        "Pick another one.");
                         auxTemp = "invalid";
-                        break;
-                    }
-                break;
-                case "S3":
-                    sheepNewPos[0] = sheep3Pos[0];
-                    sheepNewPos[1] = sheep3Pos[1];
-                    auxTemp = "S3";
-                    if(sheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
                     }
                     break;
-                case "S4":
-                    sheepNewPos[0] = sheep4Pos[0];
-                    sheepNewPos[1] = sheep4Pos[1];
-                    auxTemp = "S4";
-                    if(sheepGameOver(aux3))
-                    {
-                        Console.WriteLine("That sheep is blocked. Pick another one.");
-                        auxTemp = "invalid";
-                        break;
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Not a Valid Choice, try again.");
-                    auxTemp = "invalid";
-                    break;
+                }   
             }
+            
             return (sheepNewPos[0],sheepNewPos[1], auxTemp);
         }
         private static bool checkConvert(int aux1, string aux2, int numberOfPlays)
