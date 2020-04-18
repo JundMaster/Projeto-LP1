@@ -84,7 +84,7 @@ Mais tarde, para uma melhor organização do código, dividimos as "responsabili
   
 ---
 ### Fluxograma
-
+![Fluxograma](/fluxograma.png)
 ---
 ### Trocas de ideias/referências
 
