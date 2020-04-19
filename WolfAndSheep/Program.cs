@@ -46,7 +46,7 @@ namespace WolfAndSheep
         +"         7  --";
 
         // Indicador to turno das ovelhas
-        public static string flockTurnMessage = "-----------------------"
+        public static string flockTurnMessage = " -----------------------"
         +"-------------- FLOCK TURN --------"; 
 
         // Varíaveis temporárias para o input do jogador
@@ -447,8 +447,6 @@ namespace WolfAndSheep
             // Se o Wolf estiver no quadrado de cima
             else if  (wolfPos[0] == 0)
             {
-                Console.WriteLine(board[wolfPos[0]+1,wolfPos[1]+1].isPlayable);
-                Console.WriteLine(board[wolfPos[0]+1,wolfPos[1]-1].isPlayable);
                 gameOver = board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false 
                 && board[wolfPos[0]+1,wolfPos[1]-1].isPlayable== false;
             }
