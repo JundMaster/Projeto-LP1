@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Reflection.Emit;
+using System.Globalization;
 using System.IO;
 using System.Dynamic;
 using System.Collections;
@@ -432,14 +433,24 @@ namespace WolfAndSheep
             // Se o Wolf estiver no quadrado da direita
             else if (wolfPos[1] == 7)
             {
-                gameOver = board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false 
-                && board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
+                if (wolfPos[0] == 0)
+                    gameOver = board[wolfPos[0]+1,wolfPos[1]-1].
+                    isPlayable == false;
+                else
+                {
+                    gameOver = board[wolfPos[0]+1,wolfPos[1]-1].
+                    isPlayable == false 
+                    && board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false;
+                }
+
             }
             // Se o Wolf estiver no quadrado de cima
             else if  (wolfPos[0] == 0)
             {
-                gameOver = board[wolfPos[1]+1,wolfPos[0]+1].isPlayable == false 
-                && board[wolfPos[1]-1,wolfPos[0]+1].isPlayable == false;
+                Console.WriteLine(board[wolfPos[0]+1,wolfPos[1]+1].isPlayable);
+                Console.WriteLine(board[wolfPos[0]+1,wolfPos[1]-1].isPlayable);
+                gameOver = board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false 
+                && board[wolfPos[0]+1,wolfPos[1]-1].isPlayable== false;
             }
             // Se o Wolf estiver no quadrado de baixo
             else if  (wolfPos[0] == 7)
@@ -450,7 +461,6 @@ namespace WolfAndSheep
             // Se o Wolf estiver em outros pontos do tabuleiro
             else
             {
-            
                 gameOver = board[wolfPos[0]+1,wolfPos[1]+1].isPlayable == false 
                 && board[wolfPos[0]-1,wolfPos[1]-1].isPlayable == false 
                 && board[wolfPos[0]+1,wolfPos[1]-1].isPlayable == false 
@@ -471,101 +481,36 @@ namespace WolfAndSheep
         private static bool SheepGameOver(string aux3)
         {
             bool gameOver;
-            if (aux3 == "S1")
+            string[] sheepList = new string[] {"S1", "S2", "S3", "S4"};
+            int [][] sheepPosList = new int [4][] {sheep1Pos, sheep2Pos,
+            sheep3Pos, sheep4Pos};
+
+            for (int i = 0; i < 3; i++)
             {
-                sheepNewPos[0] = sheep1Pos[0];
-                sheepNewPos[1] = sheep1Pos[1];
-                
-                if (sheepNewPos[1] == 0)
-                {   
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;
-                }
-                else if (sheepNewPos[0] == 0)
-                    gameOver = true;
-                    
-                else
+                if (aux3 == sheepList[i])
                 {
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
-                    isPlayable == false 
-                    && board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;        
+                    sheepNewPos[0] = sheepPosList[i][0];
+                    sheepNewPos[1] = sheepPosList[i][1];
                 }
             }
-            
-            else if (aux3 == "S2")
+            if (sheepNewPos[1] == 0)
             {
-                sheepNewPos[0] = sheep2Pos[0];
-                sheepNewPos[1] = sheep2Pos[1];
-                
-                if (sheepNewPos[1] == 0)
-                {
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;
-                }
-                if (sheepNewPos[0] == 0)
-                    gameOver = true;
-
-                else
-                {
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
-                    isPlayable == false 
-                    && board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;        
-                }
-                
+                gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].
+                isPlayable == false;
             }
-
-            else if (aux3 == "S3")
+            else if (sheepNewPos[0] == 0)
+                gameOver = true;
+            else if (sheepNewPos[1] == 7)
             {
-                sheepNewPos[0] = sheep3Pos[0];  
-                sheepNewPos[1] = sheep3Pos[1];
-                
-                
-                if (sheepNewPos[1] == 0)
-                {
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;
-                }
-                if (sheepNewPos[0] == 0)
-                    gameOver = true;
-
-                else
-                {
-                    
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
-                    isPlayable == false 
-                    && board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;        
-                }
-            }
-
-            else if (aux3 == "S4")
-            {
-                sheepNewPos[0] = sheep4Pos[0];
-                sheepNewPos[1] = sheep4Pos[1];
-
-               
-                if (sheepNewPos[1] == 0)
-                {
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;
-                }
-                if (sheepNewPos[0] == 0)
-                    gameOver = true;
-
-                else
-                {
-                    
-                    gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
-                    isPlayable == false 
-                    && board[sheepNewPos[0]-1,sheepNewPos[1]+1].
-                    isPlayable == false;        
-                }
+                gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
+                isPlayable == false;
             }
             else
             {
-                gameOver = false;
+                gameOver = board[sheepNewPos[0]-1,sheepNewPos[1]-1].
+                isPlayable == false
+                && board[sheepNewPos[0]-1,sheepNewPos[1]+1].
+                isPlayable == false;        
             }
             return gameOver; 
         }
@@ -608,7 +553,8 @@ namespace WolfAndSheep
         /// conversão para inteiro</param>
         /// <param name="aux2"> Variável que guarda O Input do jogador em 
         /// formato string para conversão</param>
-        /// <param name="numberOfPlays"> Número de jogadas até ao momento</param>
+        /// <param name="numberOfPlays"> Número de jogadas até ao 
+        /// momento</param>
         /// <param name="board"> Array que contém o tabuleiro de jogo</param>
         /// <returns>Retorna "True" caso o Input seja válido ou "Falso" caso 
         /// seja inválido</returns>
