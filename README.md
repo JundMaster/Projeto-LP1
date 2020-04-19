@@ -20,7 +20,7 @@ Tarefas realizadas por ordem cronológica
 |Limitação do movimento das ovelhas|_Try-Catch_ do lobo|Limitação do movimento do lobo|
 |Método _WolfGameOver_|_Try-Catch_ das ovelhas|Método _PrintBoard_|
 |Método _SheepGameOver_ / Método _SheepChosen_|Método _CheckConvert_|Método _LegalMove_|
-|Documentação XML|Fluxograma|Relatório|
+|Documentação XML|Fluxograma / _Polish_ do código|Relatório|
 
 ---
 ### Repositório git
